@@ -5,6 +5,7 @@ plugins {
 	id("io.spring.dependency-management") version "1.1.4"
 	kotlin("jvm") version "1.8.22"
 	kotlin("plugin.spring") version "1.8.22"
+	kotlin("plugin.noarg") version "1.9.22"
 }
 
 group = "com.sparta"
@@ -32,6 +33,8 @@ dependencies {
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0")
 	annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+	implementation("com.h2database:h2")
 }
 
 tasks.withType<KotlinCompile> {
@@ -47,4 +50,16 @@ tasks.withType<Test> {
 
 tasks.bootBuildImage {
 	builder.set("paketobuildpacks/builder-jammy-base:latest")
+}
+
+allOpen {
+	annotation("jakarta.persistence.Entity")
+	annotation("jakarta.persistence.MappedSuperclass")
+	annotation("jakarta.persistence.Embeddable")
+}
+
+noArg {
+	annotation("jakarta.persistence.Entity")
+	annotation("jakarta.persistence.MappedSuperclass")
+	annotation("jakarta.persistence.Embeddable")
 }
