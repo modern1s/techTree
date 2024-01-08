@@ -1,5 +1,6 @@
 package com.sparta.techTree.post.service
 
+import com.sparta.techTree.post.dto.UpdatePostRequest
 import com.sparta.techTree.post.dto.CreatePostRequest
 import com.sparta.techTree.post.dto.PostResponse
 import jakarta.transaction.Transactional
@@ -24,12 +25,20 @@ class PostServiceImpl (private val postRepository : PostRepository) : PostServic
     }
 
     @Transactional
-    override fun createPost(request: CreatePostRequest) : PostResponse{
+    override fun createPost(request: CreatePostRequest) : PostResponse {
         return postRepository.save(
             Post(
                 title = request.title,
                 content = request.content
             )
         ).toResponse()
+    }
+    override fun updatePost(postId: Long, request: UpdatePostRequest): PostResponse {
+        val post = postRepository.findByIdOrNull(postId) ?:throw ModelNotFoundException("Post", postId)
+
+        post.title = request.title
+        post.content = request.content
+
+        return postRepository.save(post).toResponse()
     }
 }
