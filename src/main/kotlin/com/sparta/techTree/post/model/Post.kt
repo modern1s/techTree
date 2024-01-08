@@ -6,14 +6,18 @@ import jakarta.persistence.*
 
 @Entity
 @Table(name = "post")
-class Post(
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) var id: Long? = null,
+class Post(title: String, content: String) : BaseTimeEntity() {
 
-    @Column(name = "title", nullable = false) var title: String,
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    var id: Long? = null
 
-    @Column(name = "content") var content: String,
+    @Column(nullable = false)
+    var title = title
 
-    )
+    @Column(nullable = false)
+    var content = content
+}
 
 fun Post.toResponse(): PostResponse {
     return PostResponse(

@@ -14,9 +14,9 @@ import com.sparta.techTree.exception.ModelNotFoundException
 
 @Service
 
-class PostServiceImpl (private val postRepository : PostRepository) : PostService {
+class PostServiceImpl(private val postRepository: PostRepository) : PostService {
     override fun getPostList(): List<PostResponse> {
-        return postRepository.findAll().map { it.toResponse()}
+        return postRepository.findAll().map { it.toResponse() }
     }
 
     override fun getPostById(postId: Long): PostResponse {
@@ -25,7 +25,7 @@ class PostServiceImpl (private val postRepository : PostRepository) : PostServic
     }
 
     @Transactional
-    override fun createPost(request: CreatePostRequest) : PostResponse {
+    override fun createPost(request: CreatePostRequest): PostResponse {
         return postRepository.save(
             Post(
                 title = request.title,
@@ -36,16 +36,17 @@ class PostServiceImpl (private val postRepository : PostRepository) : PostServic
 
     @Transactional
     override fun updatePost(postId: Long, request: UpdatePostRequest): PostResponse {
-        val post = postRepository.findByIdOrNull(postId) ?:throw ModelNotFoundException("Post", postId)
+        val post = postRepository.findByIdOrNull(postId) ?: throw ModelNotFoundException("Post", postId)
 
         post.title = request.title
         post.content = request.content
 
         return postRepository.save(post).toResponse()
     }
+
     @Transactional
-    override fun deletePost(postId: Long){
-        val post = postRepository.findByIdOrNull(postId) ?:throw ModelNotFoundException("Post", postId)
+    override fun deletePost(postId: Long) {
+        val post = postRepository.findByIdOrNull(postId) ?: throw ModelNotFoundException("Post", postId)
         postRepository.delete(post)
     }
 }

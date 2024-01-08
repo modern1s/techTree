@@ -32,11 +32,11 @@ class PostController(private val postService: PostService) {
     fun updatePost(@PathVariable postId: Long, updatePostRequest: UpdatePostRequest): ResponseEntity<PostResponse> {
         return ResponseEntity
             .status(HttpStatus.OK)
-            .body(postService.updatePost(postId,updatePostRequest))
+            .body(postService.updatePost(postId, updatePostRequest))
     }
 
     @DeleteMapping("/{postId}")
-    fun deletePost(@PathVariable postId: Long):ResponseEntity<Unit> {
+    fun deletePost(@PathVariable postId: Long): ResponseEntity<Unit> {
         postService.deletePost(postId)
         return ResponseEntity
             .status(HttpStatus.NO_CONTENT)

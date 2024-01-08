@@ -9,9 +9,9 @@ interface PostService {
 
     fun getPostById(postId: Long): PostResponse
 
-    fun createPost(request: CreatePostRequest) : PostResponse
+    fun createPost(request: CreatePostRequest): PostResponse
 
-    fun updatePost(postId:Long, request: UpdatePostRequest):PostResponse
+    fun updatePost(postId: Long, request: UpdatePostRequest): PostResponse
 
     fun deletePost(postId: Long)
 }
