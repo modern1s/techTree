@@ -33,6 +33,7 @@ class PostServiceImpl (private val postRepository : PostRepository) : PostServic
             )
         ).toResponse()
     }
+
     @Transactional
     override fun updatePost(postId: Long, request: UpdatePostRequest): PostResponse {
         val post = postRepository.findByIdOrNull(postId) ?:throw ModelNotFoundException("Post", postId)
@@ -41,5 +42,10 @@ class PostServiceImpl (private val postRepository : PostRepository) : PostServic
         post.content = request.content
 
         return postRepository.save(post).toResponse()
+    }
+    @Transactional
+    override fun deletePost(postId: Long){
+        val post = postRepository.findByIdOrNull(postId) ?:throw ModelNotFoundException("Post", postId)
+        postRepository.delete(post)
     }
 }
