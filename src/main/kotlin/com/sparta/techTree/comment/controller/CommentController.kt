@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*
 class CommentController(private val commentService: CommentService) {
 
     @GetMapping("/{postId}")
-    fun getCommentsByPost(@PathVariable postId: Int): ResponseEntity<List<CommentDTO>> {
+    fun getCommentsByPost(@PathVariable postId: Long): ResponseEntity<List<CommentDTO>> {
         val comments = commentService.getCommentsByPost(postId)
         return ResponseEntity.ok(comments)
     }
