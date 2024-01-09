@@ -9,19 +9,19 @@ import java.time.LocalDateTime
 data class Comment (
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Int = 0,
+    var id: Long? = null,
 
     @Column(name = "userId")
-    val userId: Int,
+    val userId: Long,
 
     @Column(name = "postId")
-    val postId: Int,
+    val postId: Long,
 
     @Column(name = "content")
     val content: String,
 
     @Column(name = "createdAt")
-    val createdAt: LocalDateTime = LocalDateTime.now(),
+    val createdAt: LocalDateTime? = null,
 
     @Column(name = "updatedAt")
     var updatedAt: LocalDateTime? = null,
