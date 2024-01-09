@@ -17,6 +17,7 @@ class Post(title: String, content: String) : BaseTimeEntity() {
 
     @Column(nullable = false)
     var content = content
+
 }
 
 fun Post.toResponse(): PostResponse {
@@ -24,5 +25,7 @@ fun Post.toResponse(): PostResponse {
         id = id!!,
         title = title,
         content = content,
+        createdAt = this.createdAt,
+        updatedAt = this.updatedAt
     )
 }

@@ -41,7 +41,7 @@ class PostServiceImpl(private val postRepository: PostRepository) : PostService 
         post.title = request.title
         post.content = request.content
 
-        return postRepository.save(post).toResponse()
+        return post.toResponse()
     }
 
     @Transactional
