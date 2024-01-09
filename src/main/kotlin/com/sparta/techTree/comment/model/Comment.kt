@@ -5,27 +5,28 @@ import java.time.LocalDateTime
 
 
 @Entity
-@Table(name = "comments")
-data class Comment (
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long? = null,
-
-    @Column(name = "userId")
-    val userId: Long,
-
-    @Column(name = "postId")
-    val postId: Long,
+@Table(name = "comment")
+class Comment(
 
     @Column(name = "content")
-    val content: String,
+    var content: String,
 
-    @Column(name = "createdAt")
-    val createdAt: LocalDateTime? = null,
+    @Column(name = "user_id")
+    val userId: Long,
 
-    @Column(name = "updatedAt")
+    @Column(name = "post_id")
+    val postId: Long,
+
+    @Column(name = "create_at")
+    val createdAt: LocalDateTime = LocalDateTime.now(),
+
+    @Column (name = "update_at")
     var updatedAt: LocalDateTime? = null,
 
-    @Column(name = "deletedAt")
-    var deletedAt: LocalDateTime? = null
-)
+){
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    var id: Long? = null
+}
+
+
