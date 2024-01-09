@@ -5,8 +5,8 @@ import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface CommentRepository : JpaRepository<Comment, Long,> {
-    fun findByPostId(postId: Long,): List<Comment>
+interface CommentRepository : JpaRepository<Comment, Long> {
+    fun findByPostId(postId: Long): List<Comment>
 
-    fun findByIdAndUserId(id: Long, userId: Long,): Comment?
+    fun findByIdAndUserId(id: Long, userId: Long): Comment?
 }
