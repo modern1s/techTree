@@ -1,5 +1,6 @@
 package com.sparta.techTree.post.model
 
+import com.sparta.techTree.comment.model.Comment
 import com.sparta.techTree.post.dto.PostResponse
 import jakarta.persistence.*
 
@@ -17,6 +18,9 @@ class Post(title: String, content: String) : BaseTimeEntity() {
 
     @Column(nullable = false)
     var content = content
+    //comment와 연결 추가
+    @OneToMany(mappedBy = "post", cascade = [CascadeType.REMOVE])
+    val comment: List<Comment> = mutableListOf()
 
 }
 

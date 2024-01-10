@@ -1,8 +1,9 @@
 package com.sparta.techTree.comment.controller
 
-import com.sparta.techTree.comment.dto.CommentDTO
+import com.sparta.techTree.comment.dto.CreateCommentRequest
 import com.sparta.techTree.comment.dto.CommentResponse
 import com.sparta.techTree.comment.dto.UpdateCommentRequest
+import com.sparta.techTree.comment.model.Comment
 import com.sparta.techTree.comment.service.CommentService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -18,10 +19,20 @@ class CommentController(private val commentService: CommentService) {
         return ResponseEntity.ok(comments)
     }
 
-    @PostMapping
-    fun createComment(@RequestBody commentDto: CommentDTO): ResponseEntity<CommentResponse> {
-        val createdComment = commentService.createComment(commentDto)
-        return ResponseEntity.ok(createdComment)
+    @PostMapping("/{postId}")
+    fun createComment(
+        @PathVariable postId: Long, @RequestBody createCommentRequest: CreateCommentRequest): ResponseEntity<CommentResponse> {
+        val createdComment: Comment = commentService.createComment(postId,createCommentRequest)
+        //이 부분을 Post의 Model처럼 toResponse를 만들어서 클린코딩 하면 좋을것 같으나 일단 이렇게 함
+        val commentResponse = CommentResponse(
+            id = createdComment.id!!,
+            content = createdComment.content,
+            userId = createdComment.userId,
+            postId = createdComment.post.id!!,
+            createdAt = createdComment.createdAt,
+            updatedAt = createdComment.updatedAt
+        )
+        return ResponseEntity.ok(commentResponse)
     }
     @PutMapping("/{commentId}")
     fun updateComment(
