@@ -1,5 +1,6 @@
 package com.sparta.techTree.comment.model
 
+import com.sparta.techTree.comment.dto.CommentResponse
 import com.sparta.techTree.post.model.BaseTimeEntity
 import jakarta.persistence.*
 import java.time.LocalDateTime
@@ -22,4 +23,13 @@ class Comment(content: String, userId: Long, postId: Long) : BaseTimeEntity() {
     val postId = postId
 }
 
-
+fun Comment.toResponse(): CommentResponse {
+    return CommentResponse(
+        id = id!!,
+        userId = userId,
+        postId = postId,
+        content = content,
+        createdAt = this.createdAt,
+        updatedAt = this.updatedAt
+    )
+}

@@ -4,6 +4,7 @@ import com.sparta.techTree.comment.dto.CommentDTO
 import com.sparta.techTree.comment.dto.CommentResponse
 import com.sparta.techTree.comment.dto.UpdateCommentRequest
 import com.sparta.techTree.comment.model.Comment
+import com.sparta.techTree.comment.model.toResponse
 import com.sparta.techTree.comment.repository.CommentRepository
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
@@ -12,23 +13,26 @@ import org.springframework.stereotype.Service
 @Service
 class CommentServiceImpl(private val commentRepository: CommentRepository) : CommentService {
     override fun updateComment(commentId: Long, userId: Long, request: UpdateCommentRequest): CommentResponse {
-        val commentToUpdate = commentRepository.findByIdAndUserId(commentId, userId)
+        val comment = commentRepository.findByIdAndUserId(commentId, userId)
             ?: throw IllegalArgumentException("Comment not found or user not authorized to update")
-        commentToUpdate.content = request.content
 
-        // 업데이트된 댓글 저장
-        commentRepository.save(commentToUpdate)
+        comment.content = request.content
 
-        // 업데이트된 댓글 정보를 DTO로 변환하여 반환
-        return CommentResponse(
-            id = commentId,
-            postId = commentToUpdate.postId,
-            userId = commentToUpdate.userId,
-            content = commentToUpdate.content,
-            createdAt = commentToUpdate.createdAt,
-            updatedAt = commentToUpdate.updatedAt
-        )
+        return comment.toResponse()
     }
+        // 업데이트된 댓글 저장
+//        commentRepository.save(commentToUpdate)
+//
+//
+//        return CommentResponse(
+//            id = commentId,
+//            postId = commentToUpdate.postId,
+//            userId = commentToUpdate.userId,
+//            content = commentToUpdate.content,
+//            createdAt = commentToUpdate.createdAt,
+//            updatedAt = commentToUpdate.updatedAt
+//        )
+
 
 
     override fun deleteComment(commentId: Long, userId: Long) {
