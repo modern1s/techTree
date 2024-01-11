@@ -38,8 +38,8 @@ class PostServiceImpl(private val postRepository: PostRepository) : PostService 
     override fun updatePost(postId: Long, request: UpdatePostRequest): PostResponse {
         val post = postRepository.findByIdOrNull(postId) ?: throw ModelNotFoundException("Post", postId)
 
-        post.title = request.title
-        post.content = request.content
+        post.title = request.title ?: post.title
+        post.content = request.content ?: post.content
 
         return post.toResponse()
     }
