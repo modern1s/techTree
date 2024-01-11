@@ -1,6 +1,7 @@
 package com.sparta.techTree.user.service
 
 import com.sparta.techTree.common.auth.TokenInfo
+import com.sparta.techTree.user.dto.InfoRequest
 import com.sparta.techTree.user.dto.LoginRequest
 import com.sparta.techTree.user.dto.SignUpRequest
 import com.sparta.techTree.user.dto.UserResponse
@@ -13,5 +14,5 @@ interface UserService {
 
     fun searchMyInfo(email: String): UserResponse
 
-    fun saveMyInfo(signUpRequest: SignUpRequest): String
+    fun saveMyInfo(infoRequest: InfoRequest): String
 }
