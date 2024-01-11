@@ -10,11 +10,12 @@ import com.sparta.techTree.post.model.toResponse
 import com.sparta.techTree.post.repository.PostRepository
 import org.springframework.data.repository.findByIdOrNull
 import com.sparta.techTree.exception.ModelNotFoundException
+import com.sparta.techTree.like.service.LikeService
 
 
 @Service
 
-class PostServiceImpl(private val postRepository: PostRepository) : PostService {
+class PostServiceImpl(private val postRepository: PostRepository,private val likeService: LikeService) : PostService {
     override fun getPostList(): List<PostResponse> {
         return postRepository.findAll().map { it.toResponse() }
     }
@@ -24,16 +25,18 @@ class PostServiceImpl(private val postRepository: PostRepository) : PostService 
         return post.toResponse()
     }
 
+
     @Transactional
     override fun createPost(request: CreatePostRequest): PostResponse {
-        return postRepository.save(
+        val createdPost = postRepository.save(
             Post(
                 title = request.title,
-                content = request.content
+                content = request.content,
+                userId = request.userId
             )
-        ).toResponse()
+        )
+        return createdPost.toResponse()
     }
-
     @Transactional
     override fun updatePost(postId: Long, request: UpdatePostRequest): PostResponse {
         val post = postRepository.findByIdOrNull(postId) ?: throw ModelNotFoundException("Post", postId)

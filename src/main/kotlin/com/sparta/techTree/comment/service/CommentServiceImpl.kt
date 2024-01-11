@@ -24,7 +24,6 @@ class CommentServiceImpl(
         commentToUpdate.content = request.content
 
         commentRepository.save(commentToUpdate)
-        //댓글에 맞는 postid를 가져오게 변경
         return CommentResponse(
             id = commentToUpdate.id!!,
             userId = commentToUpdate.userId,
@@ -45,7 +44,6 @@ class CommentServiceImpl(
     override fun getCommentsByPost(postId: Long): List<CommentResponse> {
         val comments = commentRepository.findByPostId(postId)
         return comments.map {
-            //댓글에 맞는 postid를 가져오게 변경 -> 기대되는 효과는 postid에 따른 무슨 댓글이 달렷는지 확인이 가능해서 원하는 commentid를 추적해서 쉽게 댓글삭제 가능
             CommentResponse(
                 it.id!!,
                 it.userId,
@@ -57,9 +55,7 @@ class CommentServiceImpl(
         }
     }
 
-    //댓글 생성 로직 변경 -> 기존 내가 원하는 post에 댓글을 생성할수 없었는데 postid를 가져와서 하게함
-    //예시)1번 post에 댓글을 달고 싶으면 swagger기준 테스트칸에 1을 입력해야 1번 post에 댓글 생성 가능
-    //1번 post가 없는경우 ModelNotFoundException
+
     @Transactional
     override fun createComment(postId: Long, request: CreateCommentRequest): Comment {
         val post: Post = postRepository.findByIdOrNull(postId) ?: throw ModelNotFoundException("Post", postId)
