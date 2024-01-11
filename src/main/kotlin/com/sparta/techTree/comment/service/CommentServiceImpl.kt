@@ -11,7 +11,8 @@ import org.springframework.stereotype.Service
 
 
 @Service
-class CommentServiceImpl(private val commentRepository: CommentRepository) : CommentService {
+class CommentServiceImpl(
+    private val commentRepository: CommentRepository) : CommentService {
     override fun updateComment(commentId: Long, userId: Long, request: UpdateCommentRequest): CommentResponse {
         val comment = commentRepository.findByIdAndUserId(commentId, userId)
             ?: throw IllegalArgumentException("Comment not found or user not authorized to update")

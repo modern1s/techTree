@@ -3,7 +3,6 @@ package com.sparta.techTree.comment.model
 import com.sparta.techTree.comment.dto.CommentResponse
 import com.sparta.techTree.post.model.BaseTimeEntity
 import jakarta.persistence.*
-import java.time.LocalDateTime
 
 
 @Entity
@@ -13,13 +12,13 @@ class Comment(content: String, userId: Long, postId: Long) : BaseTimeEntity() {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
 
-    @Column(name = "content")
+    @Column(nullable = false)
     var content = content
 
-    @Column(name = "user_id")
+    @Column(nullable = false)
     val userId = userId
 
-    @Column(name = "post_id")
+    @Column(nullable = false)
     val postId = postId
 }
 
