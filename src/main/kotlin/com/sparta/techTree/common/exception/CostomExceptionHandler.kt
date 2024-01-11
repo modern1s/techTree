@@ -1,7 +1,6 @@
 package com.sparta.techTree.common.exception
 
 import com.sparta.techTree.common.dto.BaseResponse
-import com.sparta.techTree.common.dto.CustomUser
 import com.sparta.techTree.common.status.ResultCode
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity

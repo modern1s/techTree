@@ -1,6 +1,5 @@
 package com.sparta.techTree.user.dto
 
-import com.sparta.techTree.user.model.UserEntity
 
 data class SignUpRequest (
     var email: String,
@@ -9,7 +8,4 @@ data class SignUpRequest (
     val birth: String,
     val nickname: String,
     val techStack: String
-){
-    fun toEntity(): UserEntity =
-        UserEntity(email, password,name, birth, nickname,techStack)
-}
+)

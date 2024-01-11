@@ -1,6 +1,6 @@
 package com.sparta.techTree.user.model
 
-import com.sparta.techTree.post.model.BaseTimeEntity
+import com.sparta.techTree.common.model.BaseTimeEntity
 import com.sparta.techTree.user.dto.UserResponse
 import jakarta.persistence.*
 import java.time.LocalDate
@@ -24,14 +24,10 @@ class UserEntity(
     val id : Long? = null
 
     @Column(nullable = false, length = 30, updatable = false)
-    val email = email
+    var email = email
 
     @Column(nullable = false, length = 100)
-    val password = password
-
-//    @Enumerated(EnumType.STRING)
-//    @Column(name = "role")
-//    val role = UserRole
+    var password = password
 
     @Column(nullable = false, length = 10)
     var name = name
@@ -41,7 +37,7 @@ class UserEntity(
 
     @Temporal(TemporalType.DATE)
     @Column(nullable = false)
-    val birth= birth
+    var birth= birth
 
     @Column(nullable = false)
     var techStack = techStack
