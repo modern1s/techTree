@@ -1,7 +1,7 @@
 package com.sparta.techTree.like.dto
 
-data class PostLikeResponse(
-    val postId: Long?,
+data class CommentLikeResponse(
+    val commentId: Long?,
     val userId: Long,
     val liked: Boolean,
 )

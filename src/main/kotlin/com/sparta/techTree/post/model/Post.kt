@@ -13,10 +13,11 @@ class Post(
     @Column(name = "content") var content: String,
 
     @Column(name = "user_id") val userId: Long?,
+
+    @Column(name = "count_likes") var countLikes: Long = 0,
     //comment와 연결 추가
     @OneToMany(mappedBy = "post", cascade = [CascadeType.REMOVE]) val comment: List<Comment> = mutableListOf()
-) : BaseTimeEntity()
-{
+) : BaseTimeEntity() {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,6 +26,12 @@ class Post(
 
 fun Post.toResponse(): PostResponse {
     return PostResponse(
-        id = id!!, title = title, content = content, createdAt = this.createdAt, updatedAt = this.updatedAt, userId = userId,
+        id = id!!,
+        title = title,
+        content = content,
+        createdAt = this.createdAt,
+        updatedAt = this.updatedAt,
+        userId = userId,
+        countLikes = countLikes
     )
 }

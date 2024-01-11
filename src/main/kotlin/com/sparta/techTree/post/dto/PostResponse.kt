@@ -8,5 +8,6 @@ data class PostResponse(
     val title: String,
     val content: String,
     val createdAt: LocalDateTime,
-    val updatedAt: LocalDateTime
+    val updatedAt: LocalDateTime,
+    val countLikes: Long = 0
 )

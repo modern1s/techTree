@@ -2,6 +2,7 @@ package com.sparta.techTree.like.model
 
 
 
+import com.sparta.techTree.like.dto.CommentLikeResponse
 import com.sparta.techTree.like.dto.PostLikeResponse
 import jakarta.persistence.*
 
@@ -18,16 +19,28 @@ class Like(
     val userId: Long,
 
     @Column(name = "liked")
-    var liked: Boolean = false
+    var liked: Boolean = false,
+
 ) {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
 }
 
-fun Like.toResponse(): PostLikeResponse {
+fun Like.toPostLikeResponse(): PostLikeResponse {
     return PostLikeResponse(
         postId = postId!!,
         userId = userId,
-        liked = liked)
+        liked = liked,
+    )
 }
+
+fun Like.toCommentLikeResponse(): CommentLikeResponse {
+    return CommentLikeResponse(
+        commentId = commentId,
+        userId = userId,
+        liked = liked
+    )
+}
+
+

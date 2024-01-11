@@ -19,7 +19,7 @@ class PostController(private val postService: PostService,private val likeServic
     fun getPostList(): ResponseEntity<List<PostResponse>> {
         return ResponseEntity.status(HttpStatus.OK).body(postService.getPostList())
     }
-    //TODO: 글을 상세조회할때 좋아요 갯수가 몇개인지 확인할수 있게
+
     @GetMapping("/{postId}")
     fun getPostById(@PathVariable postId: Long): ResponseEntity<PostResponse> {
         return ResponseEntity.status(HttpStatus.OK).body(postService.getPostById(postId))
@@ -44,10 +44,16 @@ class PostController(private val postService: PostService,private val likeServic
             .status(HttpStatus.NO_CONTENT)
             .build()
     }
-    //좋아요를 누르는 컨트롤러 postid와 userid를 모두 요구함
-    @PatchMapping("/like/{postId}/{userId}")
-    fun toggleLikeForPost(@PathVariable postId: Long, @RequestHeader userId: Long): ResponseEntity<PostLikeResponse> {
-        val result = likeService.toggleLikeForPost(postId, userId)
-        return ResponseEntity.ok(result)
+
+    @PostMapping("/likes/{postId}/{userId}")
+    fun createLikeForPost(@PathVariable postId: Long, @RequestHeader userId: Long): ResponseEntity<PostLikeResponse> {
+        return ResponseEntity.status(HttpStatus.CREATED).body(likeService.createLikeForPost(postId, userId))
     }
+
+    @DeleteMapping("/likes/{postId}/{userId}")
+    fun deleteLikeForPost(@PathVariable postId: Long, @RequestHeader userId: Long): ResponseEntity<Unit> {
+        likeService.deleteLikeForPost(postId, userId)
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build()
+    }
+
 }
