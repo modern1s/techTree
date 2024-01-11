@@ -22,6 +22,7 @@ class CustomUserDetailsService(
     private fun createUserDetails(user: UserEntity): UserDetails =
         CustomUser(
             user.email,
+            user.id!!,
             user.nickname,
             passwordEncoder.encode(user.password),
             user.userRole!!.map { SimpleGrantedAuthority("ROLE_${it.role}") }

@@ -3,17 +3,16 @@ package com.sparta.techTree.user.controller
 import com.sparta.techTree.common.auth.TokenInfo
 import com.sparta.techTree.common.dto.BaseResponse
 import com.sparta.techTree.common.dto.CustomUser
+import com.sparta.techTree.user.dto.InfoRequest
 import com.sparta.techTree.user.dto.LoginRequest
 import com.sparta.techTree.user.dto.SignUpRequest
 import com.sparta.techTree.user.dto.UserResponse
 import com.sparta.techTree.user.service.UserService
 import jakarta.validation.Valid
-import org.springframework.http.HttpStatus
-import org.springframework.http.ResponseEntity
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.bind.annotation.*
 
-@RequestMapping("/mypage")
+@RequestMapping("/auth")
 @RestController
 class UserController (
     private val userService: UserService
@@ -45,16 +44,16 @@ class UserController (
     /**
      * 내 정보 저장
      */
-    @PutMapping("/info")
-    fun saveMyInfo(@RequestBody @Valid signupRequest: SignUpRequest):
+    @PatchMapping("/info")
+    fun saveMyInfo(@RequestBody @Valid infoRequest: InfoRequest):
             BaseResponse<Unit> {
         val userEmail = (SecurityContextHolder
             .getContext()
             .authentication
             .principal as CustomUser)
             .email
-        signupRequest.email = userEmail
-        val resultMsg: String = userService.saveMyInfo(signupRequest)
+        infoRequest.email = userEmail
+        val resultMsg: String = userService.saveMyInfo(infoRequest)
         return BaseResponse(message = resultMsg)
     }
 }
