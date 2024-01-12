@@ -41,7 +41,7 @@ fun Post.toResponse(): PostResponse {
         content = content,
         createdAt = this.createdAt,
         updatedAt = this.updatedAt,
-        userEmail = user.email,
+        userid = user.id!!,
         countLikes = likes.size
     )
 }

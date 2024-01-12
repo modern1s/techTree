@@ -1,5 +1,6 @@
 package com.sparta.techTree.post.controller
 
+import com.sparta.techTree.common.dto.CustomUser
 import com.sparta.techTree.like.dto.PostLikeResponse
 import com.sparta.techTree.like.service.LikeService
 import com.sparta.techTree.post.dto.CreatePostRequest
@@ -8,6 +9,7 @@ import com.sparta.techTree.post.dto.UpdatePostRequest
 import com.sparta.techTree.post.service.PostService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.bind.annotation.*
 
 
@@ -27,8 +29,15 @@ class PostController(private val postService: PostService,private val likeServic
 
     @PostMapping
     fun createPost(@RequestBody createPostRequest: CreatePostRequest): ResponseEntity<PostResponse> {
-        return ResponseEntity.status(HttpStatus.CREATED).body(postService.createPost(createPostRequest))
+        val userId = (SecurityContextHolder
+            .getContext()
+            .authentication
+            .principal as CustomUser)
+            .id
+        val postResponse = postService.createPost(createPostRequest, userId)
+        return ResponseEntity.status(HttpStatus.CREATED).body(postResponse)
     }
+
 
     @PatchMapping("/{postId}")
     fun updatePost(@PathVariable postId: Long, updatePostRequest: UpdatePostRequest): ResponseEntity<PostResponse> {
