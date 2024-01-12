@@ -2,6 +2,8 @@ package com.sparta.techTree.post.model
 
 import com.sparta.techTree.comment.model.Comment
 import com.sparta.techTree.common.model.BaseTimeEntity
+import com.sparta.techTree.like.model.Like
+import com.sparta.techTree.like.model.toPostLikeResponse
 import com.sparta.techTree.post.dto.PostResponse
 import jakarta.persistence.*
 
@@ -16,8 +18,13 @@ class Post(
     @Column(name = "user_id") val userId: Long?,
 
     @Column(name = "count_likes") var countLikes: Long = 0,
-    //comment와 연결 추가
-    @OneToMany(mappedBy = "post", cascade = [CascadeType.REMOVE]) val comment: List<Comment> = mutableListOf()
+
+    @OneToMany(mappedBy = "post", cascade = [CascadeType.REMOVE])
+    val comment: List<Comment> = mutableListOf(),
+
+    @OneToMany(mappedBy = "post", cascade = [CascadeType.REMOVE])
+    val likes: List<Like> = mutableListOf()
+
 ) : BaseTimeEntity() {
 
     @Id
@@ -33,6 +40,6 @@ fun Post.toResponse(): PostResponse {
         createdAt = this.createdAt,
         updatedAt = this.updatedAt,
         userId = userId,
-        countLikes = countLikes
+        countLikes = likes.size
     )
 }

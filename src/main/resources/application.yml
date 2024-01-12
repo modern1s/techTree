@@ -17,12 +17,16 @@ spring:
     jpa:
         open-in-view: true
         hibernate:
-            ddl-auto: none
+            ddl-auto: create-drop
         properties:
             hibernate:
                 show_sql: false
                 format_sql: true
                 highlight_sql: true
+    datasource:
+        url: jdbc:postgresql://db.fwsspudyollydfupfjne.supabase.co:5432/postgres
+        username: postgres
+        password: sb2005@sb2005
 logging:
     pattern:
         console: "[%d{HH:mm:ss.SSS}][%-5level][%logger.%method:line%line] - %msg%n"

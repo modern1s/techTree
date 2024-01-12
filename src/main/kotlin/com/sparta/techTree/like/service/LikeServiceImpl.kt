@@ -2,7 +2,7 @@ package com.sparta.techTree.like.service
 
 import com.sparta.techTree.comment.model.Comment
 import com.sparta.techTree.comment.repository.CommentRepository
-import com.sparta.techTree.exception.ModelNotFoundException
+import com.sparta.techTree.common.exception.ModelNotFoundException
 import com.sparta.techTree.like.dto.CommentLikeResponse
 import com.sparta.techTree.like.dto.PostLikeResponse
 import com.sparta.techTree.like.model.Like
@@ -22,15 +22,13 @@ class LikeServiceImpl(
     private val postRepository: PostRepository,
     private val commentRepository: CommentRepository
 ) : LikeService {
-    //patch 기능으로 도저히 좋아요 숫자 증감 못하겠어서 delete랑 create로 나눳습니다...
-    //create로 좋아요를 만들고, delete로 삭제합니다
     @Transactional
     override fun createLikeForPost(postId: Long, userId: Long): PostLikeResponse {
         val post: Post = postRepository.findByIdOrNull(postId) ?: throw ModelNotFoundException("Post", postId)
         if (post != null) {
             val existingLike = likeRepository.findByPostIdAndUserId(postId, userId)
             if (existingLike == null) {
-                val newLike = likeRepository.save(Like(postId = postId, userId = userId, commentId = null, liked = true))
+                val newLike = likeRepository.save(Like(post= post, userId = userId, comment = null, liked = true))
                 return newLike.toPostLikeResponse()
             } else {
                 throw IllegalArgumentException("Like already exists for postId = $postId and userId = $userId")
@@ -54,7 +52,7 @@ class LikeServiceImpl(
         if (comment != null) {
             val existingLike = likeRepository.findByCommentIdAndUserId(commentId, userId)
             if (existingLike == null) {
-                val newLike = likeRepository.save(Like(postId = null, commentId = commentId, userId = userId, liked = true))
+                val newLike = likeRepository.save(Like(post = null, comment = comment, userId = userId, liked = true))
                 return newLike.toCommentLikeResponse()
             } else {
                 throw IllegalArgumentException("Like already exists for commentId = $commentId and userId = $userId")

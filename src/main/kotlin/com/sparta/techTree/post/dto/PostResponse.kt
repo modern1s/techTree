@@ -1,5 +1,6 @@
 package com.sparta.techTree.post.dto
 
+import com.sparta.techTree.like.dto.PostLikeResponse
 import java.time.LocalDateTime
 
 data class PostResponse(
@@ -9,5 +10,5 @@ data class PostResponse(
     val content: String,
     val createdAt: LocalDateTime,
     val updatedAt: LocalDateTime,
-    val countLikes: Long = 0
+    val countLikes: Int
 )
