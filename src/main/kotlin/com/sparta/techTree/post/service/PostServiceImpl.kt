@@ -9,7 +9,7 @@ import com.sparta.techTree.post.model.Post
 import com.sparta.techTree.post.model.toResponse
 import com.sparta.techTree.post.repository.PostRepository
 import org.springframework.data.repository.findByIdOrNull
-import com.sparta.techTree.exception.ModelNotFoundException
+import com.sparta.techTree.common.exception.ModelNotFoundException
 
 
 @Service
@@ -38,8 +38,8 @@ class PostServiceImpl(private val postRepository: PostRepository) : PostService 
     override fun updatePost(postId: Long, request: UpdatePostRequest): PostResponse {
         val post = postRepository.findByIdOrNull(postId) ?: throw ModelNotFoundException("Post", postId)
 
-        post.title = request.title
-        post.content = request.content
+        post.title = request.title ?: post.title
+        post.content = request.content ?: post.content
 
         return post.toResponse()
     }

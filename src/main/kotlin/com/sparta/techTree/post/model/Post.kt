@@ -1,5 +1,6 @@
 package com.sparta.techTree.post.model
 
+import com.sparta.techTree.common.model.BaseTimeEntity
 import com.sparta.techTree.post.dto.PostResponse
 import jakarta.persistence.*
 
@@ -17,7 +18,6 @@ class Post(title: String, content: String) : BaseTimeEntity() {
 
     @Column(nullable = false)
     var content = content
-
 }
 
 fun Post.toResponse(): PostResponse {
