@@ -2,7 +2,7 @@ package com.sparta.techTree.like.service
 
 import com.sparta.techTree.comment.model.Comment
 import com.sparta.techTree.comment.repository.CommentRepository
-import com.sparta.techTree.exception.ModelNotFoundException
+import com.sparta.techTree.common.exception.ModelNotFoundException
 import com.sparta.techTree.like.dto.CommentLikeResponse
 import com.sparta.techTree.like.dto.PostLikeResponse
 import com.sparta.techTree.like.model.Like
