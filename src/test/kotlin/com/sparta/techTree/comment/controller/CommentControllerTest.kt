@@ -1,7 +1,7 @@
 package com.sparta.techTree.comment.controller
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.sparta.techTree.comment.dto.CommentDTO
+import com.sparta.techTree.comment.dto.CreateCommentRequest
 import com.sparta.techTree.comment.service.CommentService
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -17,7 +17,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 import java.time.LocalDateTime
-import org.mockito.kotlin.any
+
 @ExtendWith(SpringExtension::class)
 @WebMvcTest(CommentController::class)
 class CommentControllerTest {
@@ -31,16 +31,16 @@ class CommentControllerTest {
     @Autowired
     private lateinit var objectMapper: ObjectMapper
 
-    private lateinit var commentDTO: CommentDTO
+    private lateinit var createCommentRequest: CreateCommentRequest
 
     @BeforeEach
     fun setup() {
-        commentDTO = CommentDTO(1, 1, 1, "Sample comment", LocalDateTime.parse("2024-01-09T20:45:55"), null, null)
+        createCommentRequest = CreateCommentRequest(1, 1, 1, "Sample comment", LocalDateTime.parse("2024-01-09T20:45:55"), null, null)
     }
 
     @Test
     fun `get comments by post id`() {
-        `when`(commentService.getCommentsByPost(anyInt())).thenReturn(listOf(commentDTO))
+        `when`(commentService.getCommentsByPost(anyInt())).thenReturn(listOf(createCommentRequest))
 
         mockMvc.perform(get("/comments/{postId}", 1))
             .andExpect(status().isOk)
@@ -50,11 +50,11 @@ class CommentControllerTest {
 
     @Test
     fun `create a new comment`() {
-        `when`(commentService.createComment(any())).thenReturn(commentDTO)
+        `when`(commentService.createComment(any())).thenReturn(createCommentRequest)
 
         mockMvc.perform(post("/comments")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(commentDTO)))
+            .content(objectMapper.writeValueAsString(createCommentRequest)))
             .andExpect(status().isOk)
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.content").value("Sample comment"))

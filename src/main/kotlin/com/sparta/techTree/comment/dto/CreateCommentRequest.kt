@@ -1,8 +1,6 @@
 package com.sparta.techTree.comment.dto
 
-
-data class CommentDTO (
+data class CreateCommentRequest (
     val userId: Long,
-    val postId: Long,
     val content: String
 )

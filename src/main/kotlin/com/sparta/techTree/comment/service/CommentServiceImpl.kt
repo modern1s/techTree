@@ -1,73 +1,64 @@
 package com.sparta.techTree.comment.service
 
-import com.sparta.techTree.comment.dto.CommentDTO
+import com.sparta.techTree.comment.dto.CreateCommentRequest
 import com.sparta.techTree.comment.dto.CommentResponse
 import com.sparta.techTree.comment.dto.UpdateCommentRequest
 import com.sparta.techTree.comment.model.Comment
 import com.sparta.techTree.comment.model.toResponse
 import com.sparta.techTree.comment.repository.CommentRepository
+import com.sparta.techTree.common.exception.ModelNotFoundException
+import com.sparta.techTree.like.repository.LikeRepository
+import com.sparta.techTree.post.model.Post
+import com.sparta.techTree.post.repository.PostRepository
 import jakarta.transaction.Transactional
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 
 
 @Service
 class CommentServiceImpl(
-    private val commentRepository: CommentRepository) : CommentService {
-    override fun updateComment(commentId: Long, userId: Long, request: UpdateCommentRequest): CommentResponse {
-        val comment = commentRepository.findByIdAndUserId(commentId, userId)
-            ?: throw IllegalArgumentException("Comment not found or user not authorized to update")
+    private val commentRepository: CommentRepository,
+    private val postRepository: PostRepository,
+    private val likeRepository: LikeRepository
+) : CommentService {
 
-        comment.content = request.content
-
-        return comment.toResponse()
+    @Transactional
+    override fun createComment(postId: Long, request: CreateCommentRequest): CommentResponse {
+        val post: Post = postRepository.findByIdOrNull(postId) ?: throw ModelNotFoundException("Post", postId)
+        val comment = Comment(
+            post = post, userId = request.userId, postId = postId, content = request.content, countLikes = 0
+        )
+        val savedComment = commentRepository.save(comment)
+        return savedComment.toResponse()
     }
-        // 업데이트된 댓글 저장
-//        commentRepository.save(commentToUpdate)
-//
-//
-//        return CommentResponse(
-//            id = commentId,
-//            postId = commentToUpdate.postId,
-//            userId = commentToUpdate.userId,
-//            content = commentToUpdate.content,
-//            createdAt = commentToUpdate.createdAt,
-//            updatedAt = commentToUpdate.updatedAt
-//        )
+
+    @Transactional
+    override fun updateComment(commentId: Long, userId: Long, request: UpdateCommentRequest): CommentResponse {
+        val commentToUpdate = commentRepository.findByIdAndUserId(commentId, userId)
+            ?: throw IllegalArgumentException("Comment not found or user not authorized to update")
+        commentToUpdate.content = request.content
+        val updatedComment = commentRepository.save(commentToUpdate)
+        val countLikes = likeRepository.countByCommentId(commentId)
+        commentToUpdate.countLikes = countLikes
+        return updatedComment.toResponse()
+    }
 
 
-
+    @Transactional
     override fun deleteComment(commentId: Long, userId: Long) {
         val deleteComment = commentRepository.findByIdAndUserId(commentId, userId)
             ?: throw IllegalArgumentException("Comment not found or user not authorized to delete")
         commentRepository.delete(deleteComment)
     }
 
+    @Transactional
     override fun getCommentsByPost(postId: Long): List<CommentResponse> {
         val comments = commentRepository.findByPostId(postId)
-        return comments.map {
-            CommentResponse(
-                it.id!!,
-                it.userId,
-                it.postId,
-                it.content,
-                it.createdAt,
-                it.updatedAt,
-            )
+        return comments.map { comment ->
+            val countLikes = likeRepository.countByCommentId(comment.id!!)
+            comment.countLikes = countLikes
+            comment.toResponse()
         }
-    }
-
-    @Transactional
-    override fun createComment(commentDto: CommentDTO): CommentResponse {
-        val comment = Comment(userId = commentDto.userId, postId = commentDto.postId, content = commentDto.content)
-        val savedComment = commentRepository.save(comment)
-        return CommentResponse(
-            savedComment.id!!,
-            savedComment.userId,
-            savedComment.postId,
-            savedComment.content,
-            savedComment.createdAt,
-            savedComment.updatedAt,
-        )
     }
 }
 
