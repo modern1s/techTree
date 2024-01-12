@@ -1,4 +1,4 @@
-package com.sparta.techTree.exception.dto
+package com.sparta.techTree.common.dto
 
 data class ErrorResponse(
     val message: String?,

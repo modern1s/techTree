@@ -9,7 +9,7 @@ import com.sparta.techTree.post.model.Post
 import com.sparta.techTree.post.model.toResponse
 import com.sparta.techTree.post.repository.PostRepository
 import org.springframework.data.repository.findByIdOrNull
-import com.sparta.techTree.exception.ModelNotFoundException
+import com.sparta.techTree.common.exception.ModelNotFoundException
 
 
 @Service
