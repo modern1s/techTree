@@ -23,10 +23,10 @@ class CommentServiceImpl(
 ) : CommentService {
 
     @Transactional
-    override fun createComment(postId: Long, request: CreateCommentRequest): CommentResponse {
+    override fun createComment(postId: Long, userId: Long, request: CreateCommentRequest): CommentResponse {
         val post: Post = postRepository.findByIdOrNull(postId) ?: throw ModelNotFoundException("Post", postId)
         val comment = Comment(
-            post = post, userId = request.userId, content = request.content, countLikes = 0
+            post = post, userId = userId, content = request.content, countLikes = 0
         )
         val savedComment = commentRepository.save(comment)
         return savedComment.toResponse()

@@ -89,7 +89,7 @@ class UserServiceImpl(
         user.birth = infoRequest.birth ?: user.birth
         user.techStack = infoRequest.techStack ?: user.techStack
 
-        userRepository.save(user)
+        user.toResponse()
         return "수정되었습니다."
     }
 }

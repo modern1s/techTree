@@ -10,10 +10,12 @@ import com.sparta.techTree.post.model.Post
 import com.sparta.techTree.post.model.toResponse
 import com.sparta.techTree.post.repository.PostRepository
 import org.springframework.data.repository.findByIdOrNull
+
 import com.sparta.techTree.like.repository.LikeRepository
+import com.sparta.techTree.user.model.UserEntity
 import com.sparta.techTree.user.repository.UserRepository
 import jakarta.persistence.EntityNotFoundException
-import java.nio.file.AccessDeniedException
+import org.springframework.security.core.context.SecurityContextHolder
 
 
 @Service
@@ -56,25 +58,18 @@ class PostServiceImpl(private val postRepository: PostRepository, private val li
     }
 
     @Transactional
-    override fun updatePost(postId: Long, request: UpdatePostRequest,userId: Long): PostResponse {
+    override fun updatePost(postId: Long, userId: Long, request: UpdatePostRequest,): PostResponse {
         val post = postRepository.findByIdOrNull(postId) ?: throw ModelNotFoundException("Post", postId)
-        if (post.user.id != userId) {
-            throw AccessDeniedException("User with ID $userId does not have permission to update post with ID $postId")
-        }
         val countLikes = likeRepository.countByPostId(postId)
         post.title = request.title ?: post.title
         post.content = request.content ?: post.content
         post.countLikes = countLikes
-        val updatedPost = postRepository.save(post)
-        return updatedPost.toResponse()
+        return post.toResponse()
     }
 
     @Transactional
-    override fun deletePost(postId: Long,userId:Long) {
+    override fun deletePost(postId: Long,userId: Long) {
         val post = postRepository.findByIdOrNull(postId) ?: throw ModelNotFoundException("Post", postId)
-        if (post.user.id != userId) {
-            throw AccessDeniedException("User with ID $userId does not have permission to delete post with ID $postId")
-        }
         postRepository.delete(post)
     }
 }
