@@ -12,11 +12,13 @@ import com.sparta.techTree.post.repository.PostRepository
 import org.springframework.data.repository.findByIdOrNull
 
 import com.sparta.techTree.like.repository.LikeRepository
+import com.sparta.techTree.user.repository.UserRepository
+import jakarta.persistence.EntityNotFoundException
 
 
 @Service
 
-class PostServiceImpl(private val postRepository: PostRepository, private val likeRepository: LikeRepository) :
+class PostServiceImpl(private val postRepository: PostRepository, private val likeRepository: LikeRepository,private val userRepository: UserRepository) :
     PostService {
 
     override fun getPostList(): List<PostResponse> {
@@ -35,12 +37,19 @@ class PostServiceImpl(private val postRepository: PostRepository, private val li
         return post.toResponse()
     }
 
-
+    //이메일을 통해 글을 쓸수 있게 변경
+    //id로 할수도 있지만, 그 경우 구분력이 너무 떨어짐(내가 id번호가 몇인지 기억을 해야함)
+    //그에 비해서 email은 로그인할때 id역할도 해서 글 작성시 요구했음!
     @Transactional
     override fun createPost(request: CreatePostRequest): PostResponse {
+        val user = userRepository.findByEmail(request.userEmail)
+            ?: throw EntityNotFoundException("User with email ${request.userEmail} not found")
         val createdPost = postRepository.save(
             Post(
-                title = request.title, content = request.content, userId = request.userId, countLikes = 0
+                title = request.title,
+                content = request.content,
+                user = user,
+                countLikes = 0
             )
         )
         return createdPost.toResponse()

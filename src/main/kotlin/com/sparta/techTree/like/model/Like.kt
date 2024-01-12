@@ -6,6 +6,7 @@ import com.sparta.techTree.comment.model.Comment
 import com.sparta.techTree.like.dto.CommentLikeResponse
 import com.sparta.techTree.like.dto.PostLikeResponse
 import com.sparta.techTree.post.model.Post
+import com.sparta.techTree.user.model.UserEntity
 import jakarta.persistence.*
 
 @Entity
@@ -24,6 +25,10 @@ class Like(
 
     @Column(name = "liked")
     var liked: Boolean = false,
+
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "user_id")
+//    val user: UserEntity
 
     ) {
     @Id

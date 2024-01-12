@@ -1,6 +1,9 @@
 package com.sparta.techTree.user.model
 
+import com.sparta.techTree.comment.model.Comment
 import com.sparta.techTree.common.model.BaseTimeEntity
+import com.sparta.techTree.like.model.Like
+import com.sparta.techTree.post.model.Post
 import com.sparta.techTree.user.dto.UserResponse
 import jakarta.persistence.*
 import java.time.LocalDate
@@ -45,6 +48,15 @@ class UserEntity(
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     val userRole: List<UserRoleEntity>? = null
 
+//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+//    val posts: List<Post>? = null
+//
+//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+//    val comments: List<Comment>? = null
+//
+//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+//    val likes: List<Like>? = null
+//   TODO:필요한지 아닌지 회의(물어보기) 일단은 사용이 안되고 있음.
     private fun LocalDate.formatDate(): String =
         this.format(DateTimeFormatter.ofPattern("yyyyMMdd"))
 }

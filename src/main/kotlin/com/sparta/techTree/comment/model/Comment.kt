@@ -4,6 +4,7 @@ import com.sparta.techTree.comment.dto.CommentResponse
 import com.sparta.techTree.common.model.BaseTimeEntity
 import com.sparta.techTree.like.model.Like
 import com.sparta.techTree.post.model.Post
+import com.sparta.techTree.user.model.UserEntity
 import jakarta.persistence.*
 
 @Entity
@@ -18,8 +19,11 @@ class Comment(
     @ManyToOne @JoinColumn(name = "post_id") val post: Post?,
 
     @OneToMany(mappedBy = "comment", cascade = [CascadeType.REMOVE])
-    val likes: List<Like> = mutableListOf()
+    val likes: List<Like> = mutableListOf(),
 
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "user_id")
+//    val user: UserEntity
     ) : BaseTimeEntity() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
