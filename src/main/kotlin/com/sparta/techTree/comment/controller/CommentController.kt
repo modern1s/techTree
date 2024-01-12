@@ -41,7 +41,6 @@ class CommentController(private val commentService: CommentService, private val 
         val userId = user.id
         return ResponseEntity.status(HttpStatus.OK)
             .body(commentService.updateComment(commentId, userId, updateCommentRequest))
-
     }
 
     @DeleteMapping("/{commentId}")
