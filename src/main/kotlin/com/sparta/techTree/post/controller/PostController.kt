@@ -41,26 +41,46 @@ class PostController(private val postService: PostService,private val likeServic
 
     @PatchMapping("/{postId}")
     fun updatePost(@PathVariable postId: Long, updatePostRequest: UpdatePostRequest): ResponseEntity<PostResponse> {
+        val userId = (SecurityContextHolder
+            .getContext()
+            .authentication
+            .principal as CustomUser)
+            .id
         return ResponseEntity
             .status(HttpStatus.OK)
-            .body(postService.updatePost(postId, updatePostRequest))
+            .body(postService.updatePost(postId, updatePostRequest , userId))
     }
 
     @DeleteMapping("/{postId}")
     fun deletePost(@PathVariable postId: Long): ResponseEntity<Unit> {
-        postService.deletePost(postId)
+        val userId = (SecurityContextHolder
+            .getContext()
+            .authentication
+            .principal as CustomUser)
+            .id
+        postService.deletePost(postId,userId)
         return ResponseEntity
             .status(HttpStatus.NO_CONTENT)
             .build()
     }
 
-    @PostMapping("/likes/{postId}/{userId}")
-    fun createLikeForPost(@PathVariable postId: Long, @RequestHeader userId: Long): ResponseEntity<PostLikeResponse> {
+    @PostMapping("/likes/{postId}")
+    fun createLikeForPost(@PathVariable postId: Long): ResponseEntity<PostLikeResponse> {
+        val userId = (SecurityContextHolder
+            .getContext()
+            .authentication
+            .principal as CustomUser)
+            .id
         return ResponseEntity.status(HttpStatus.CREATED).body(likeService.createLikeForPost(postId, userId))
     }
 
-    @DeleteMapping("/likes/{postId}/{userId}")
-    fun deleteLikeForPost(@PathVariable postId: Long, @RequestHeader userId: Long): ResponseEntity<Unit> {
+    @DeleteMapping("/likes/{postId}")
+    fun deleteLikeForPost(@PathVariable postId: Long): ResponseEntity<Unit> {
+        val userId = (SecurityContextHolder
+            .getContext()
+            .authentication
+            .principal as CustomUser)
+            .id
         likeService.deleteLikeForPost(postId, userId)
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build()
     }
