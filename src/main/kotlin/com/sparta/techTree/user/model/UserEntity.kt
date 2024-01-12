@@ -57,6 +57,7 @@ class UserEntity(
 //    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
 //    val likes: List<Like>? = null
 //   TODO:필요한지 아닌지 회의(물어보기) 일단은 사용이 안되고 있음.
+//   TODO:이것들이 사용되려면 마이페이지 같은걸로 글/댓글/좋아요를 가져오게 한다면 필요할지도?
     private fun LocalDate.formatDate(): String =
         this.format(DateTimeFormatter.ofPattern("yyyyMMdd"))
 }

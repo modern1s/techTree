@@ -20,32 +20,30 @@ class Like(
     @JoinColumn(name = "comment_id")
     val comment: Comment?,
 
-    @Column(name = "user_id")
-    val userId: Long,
-
     @Column(name = "liked")
     var liked: Boolean = false,
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "user_id")
-//    val user: UserEntity
+    //연관 관계 설정
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    val user: UserEntity
 
     ) {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
 }
-
+//연관 관계 설정에 따른 userId 부분 수정
 fun Like.toPostLikeResponse(): PostLikeResponse {
     return PostLikeResponse(
-        userId = userId,
+        userId = user.id!!,
         liked = liked,
     )
 }
-
+//연관 관계 설정에 따른 userId 부분 수정
 fun Like.toCommentLikeResponse(): CommentLikeResponse {
     return CommentLikeResponse(
-        userId = userId,
+        userId = user.id!!,
         liked = liked
     )
 }

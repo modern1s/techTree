@@ -12,8 +12,6 @@ import jakarta.persistence.*
 class Comment(
     @Column(name = "content") var content: String,
 
-    @Column(name = "user_id") val userId: Long,
-
     @Column(name = "count_likes") var countLikes: Long = 0,
 
     @ManyToOne @JoinColumn(name = "post_id") val post: Post?,
@@ -21,9 +19,10 @@ class Comment(
     @OneToMany(mappedBy = "comment", cascade = [CascadeType.REMOVE])
     val likes: List<Like> = mutableListOf(),
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "user_id")
-//    val user: UserEntity
+    //연관 관계 지어줌
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    val user: UserEntity?
     ) : BaseTimeEntity() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,7 +31,7 @@ class Comment(
 fun Comment.toResponse(): CommentResponse {
     return CommentResponse(
         id = id!!,
-        userId = userId,
+        userId = user?.id!!,
         postId = post?.id!!,
         content = content,
         createdAt = this.createdAt,

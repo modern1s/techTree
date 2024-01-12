@@ -23,7 +23,7 @@ class Post(
 
     @OneToMany(mappedBy = "post", cascade = [CascadeType.REMOVE])
     val likes: List<Like> = mutableListOf(),
-    //유저와 연결
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     val user: UserEntity
@@ -41,7 +41,7 @@ fun Post.toResponse(): PostResponse {
         content = content,
         createdAt = this.createdAt,
         updatedAt = this.updatedAt,
-        userid = user.id!!,
+        userId = user.id!!,
         countLikes = likes.size
     )
 }

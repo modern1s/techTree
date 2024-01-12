@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 
-@RequestMapping("/post")
+@RequestMapping("/posts")
 @RestController
 class PostController(private val postService: PostService,private val likeService: LikeService) {
 
@@ -33,38 +33,38 @@ class PostController(private val postService: PostService,private val likeServic
         return ResponseEntity.status(HttpStatus.CREATED).body(postResponse)
     }
 
-
+    //@pathvariable에 userid는 필요없음,userid를 직접 적어서 하는게 아니고 로그인 되있는 아이디를 사용해야 하기 때문
     @PatchMapping("/{postId}")
     fun updatePost(@AuthenticationPrincipal user: CustomUser,
-        @PathVariable postId: Long,userId: Long,updatePostRequest: UpdatePostRequest): ResponseEntity<PostResponse> {
+        @PathVariable postId: Long,updatePostRequest: UpdatePostRequest): ResponseEntity<PostResponse> {
         val userId = user.id
         return ResponseEntity
             .status(HttpStatus.OK)
             .body(postService.updatePost(postId, userId, updatePostRequest))
     }
-
+    //@pathvariable에 userid는 필요없음,userid를 직접 적어서 하는게 아니고 로그인 되있는 아이디를 사용해야 하기 때문
     @DeleteMapping("/{postId}")
-    fun deletePost(@AuthenticationPrincipal user: CustomUser, @PathVariable postId: Long, userId: Long): ResponseEntity<Unit> {
+    fun deletePost(@AuthenticationPrincipal user: CustomUser, @PathVariable postId: Long): ResponseEntity<Unit> {
         val userId = user.id
         postService.deletePost(postId, userId)
         return ResponseEntity
             .status(HttpStatus.NO_CONTENT)
             .build()
     }
-
-    @PostMapping("/likes/{postId}/{userId}")
+    //{userid}는 적을 필요가 없음/@pathvariable에 userid는 필요없음,userid를 직접 적어서 하는게 아니고 로그인 되있는 아이디를 사용해야 하기 때문
+    @PostMapping("/likes/{postId}")
     fun createLikeForPost(
         @AuthenticationPrincipal user: CustomUser,
-        @PathVariable postId: Long, userId: Long
+        @PathVariable postId: Long
     ): ResponseEntity<PostLikeResponse> {
         val userId = user.id
         return ResponseEntity.status(HttpStatus.CREATED).body(likeService.createLikeForPost(postId, userId))
     }
-
-    @DeleteMapping("/likes/{postId}/{userId}")
+    //{userid}는 적을 필요가 없음/@pathvariable에 userid는 필요없음,userid를 직접 적어서 하는게 아니고 로그인 되있는 아이디를 사용해야 하기 때문
+    @DeleteMapping("/likes/{postId}")
     fun deleteLikeForPost(
         @AuthenticationPrincipal user: CustomUser,
-        @PathVariable postId: Long, userId: Long
+        @PathVariable postId: Long
     ): ResponseEntity<Unit> {
         val userId = user.id
         likeService.deleteLikeForPost(postId, userId)
