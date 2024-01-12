@@ -6,7 +6,7 @@ import com.sparta.techTree.comment.dto.UpdateCommentRequest
 import com.sparta.techTree.comment.model.Comment
 
 interface CommentService {
-    fun createComment(postId: Long, request: CreateCommentRequest): CommentResponse
+    fun createComment(postId: Long, userId: Long, request: CreateCommentRequest): CommentResponse
 
     fun updateComment(commentId: Long, userId: Long, request: UpdateCommentRequest): CommentResponse
 

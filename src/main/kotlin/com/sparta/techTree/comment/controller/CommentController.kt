@@ -3,13 +3,13 @@ package com.sparta.techTree.comment.controller
 import com.sparta.techTree.comment.dto.CreateCommentRequest
 import com.sparta.techTree.comment.dto.CommentResponse
 import com.sparta.techTree.comment.dto.UpdateCommentRequest
-import com.sparta.techTree.comment.model.Comment
 import com.sparta.techTree.comment.service.CommentService
+import com.sparta.techTree.common.dto.CustomUser
 import com.sparta.techTree.like.dto.CommentLikeResponse
-import com.sparta.techTree.like.dto.PostLikeResponse
 import com.sparta.techTree.like.service.LikeService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -24,38 +24,50 @@ class CommentController(private val commentService: CommentService, private val 
 
     @PostMapping("/{postId}")
     fun createComment(
+        @AuthenticationPrincipal user: CustomUser,
         @PathVariable postId: Long, @RequestBody createCommentRequest: CreateCommentRequest
     ): ResponseEntity<CommentResponse> {
-        val createdComment: CommentResponse = commentService.createComment(postId, createCommentRequest)
+        val userId = user.id
+        val createdComment = commentService.createComment(postId, userId, createCommentRequest)
         return ResponseEntity.status(HttpStatus.CREATED).body(createdComment)
     }
 
     @PutMapping("/{commentId}")
     fun updateComment(
+        @AuthenticationPrincipal user: CustomUser,
         @PathVariable commentId: Long,
-        @RequestHeader userId: Long,
         @RequestBody updateCommentRequest: UpdateCommentRequest
     ): ResponseEntity<CommentResponse> {
+        val userId = user.id
         return ResponseEntity.status(HttpStatus.OK)
             .body(commentService.updateComment(commentId, userId, updateCommentRequest))
 
     }
 
     @DeleteMapping("/{commentId}")
-    fun deleteComment(@PathVariable commentId: Long, @RequestHeader userId: Long): ResponseEntity<Unit> {
+    fun deleteComment(
+        @AuthenticationPrincipal user: CustomUser,
+        @PathVariable commentId: Long): ResponseEntity<Unit> {
+        val userId = user.id
         commentService.deleteComment(commentId, userId)
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build()
     }
 
     @PostMapping("/likes/{commentId}/{userId}")
     fun createLikeForComment(
-        @PathVariable commentId: Long, @PathVariable userId: Long
+        @AuthenticationPrincipal user: CustomUser,
+        @PathVariable commentId: Long
     ): ResponseEntity<CommentLikeResponse> {
+        val userId = user.id
         return ResponseEntity.status(HttpStatus.CREATED).body(likeService.createLikeForComment(commentId, userId))
     }
 
     @DeleteMapping("/likes/{commentId}/{userId}")
-    fun deleteLikeForComment(@PathVariable commentId: Long, @PathVariable userId: Long): ResponseEntity<Unit> {
+    fun deleteLikeForComment(
+        @AuthenticationPrincipal user: CustomUser,
+        @PathVariable commentId: Long
+    ): ResponseEntity<Unit> {
+        val userId = user.id
         likeService.deleteLikeForComment(commentId, userId)
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build()
     }

@@ -58,7 +58,7 @@ class PostServiceImpl(private val postRepository: PostRepository, private val li
     }
 
     @Transactional
-    override fun updatePost(postId: Long, request: UpdatePostRequest,): PostResponse {
+    override fun updatePost(postId: Long, userId: Long, request: UpdatePostRequest,): PostResponse {
         val post = postRepository.findByIdOrNull(postId) ?: throw ModelNotFoundException("Post", postId)
         val countLikes = likeRepository.countByPostId(postId)
         post.title = request.title ?: post.title
@@ -68,7 +68,7 @@ class PostServiceImpl(private val postRepository: PostRepository, private val li
     }
 
     @Transactional
-    override fun deletePost(postId: Long) {
+    override fun deletePost(postId: Long,userId: Long) {
         val post = postRepository.findByIdOrNull(postId) ?: throw ModelNotFoundException("Post", postId)
         postRepository.delete(post)
     }

@@ -12,7 +12,6 @@ import org.springframework.http.ResponseEntity
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.bind.annotation.*
 
-
 @RequestMapping("/post")
 @RestController
 class PostController(private val postService: PostService,private val likeService: LikeService) {
@@ -28,39 +27,46 @@ class PostController(private val postService: PostService,private val likeServic
     }
 
     @PostMapping
-    fun createPost(@RequestBody createPostRequest: CreatePostRequest): ResponseEntity<PostResponse> {
-        val userId = (SecurityContextHolder
-            .getContext()
-            .authentication
-            .principal as CustomUser)
-            .id
+    fun createPost(@AuthenticationPrincipal user: CustomUser, @RequestBody createPostRequest: CreatePostRequest): ResponseEntity<PostResponse> {
+        val userId = user.id
         val postResponse = postService.createPost(createPostRequest, userId)
         return ResponseEntity.status(HttpStatus.CREATED).body(postResponse)
     }
 
 
     @PatchMapping("/{postId}")
-    fun updatePost(@PathVariable postId: Long, updatePostRequest: UpdatePostRequest): ResponseEntity<PostResponse> {
+    fun updatePost(@AuthenticationPrincipal user: CustomUser,
+        @PathVariable postId: Long,userId: Long,updatePostRequest: UpdatePostRequest): ResponseEntity<PostResponse> {
+        val userId = user.id
         return ResponseEntity
             .status(HttpStatus.OK)
-            .body(postService.updatePost(postId, updatePostRequest))
+            .body(postService.updatePost(postId, userId, updatePostRequest))
     }
 
     @DeleteMapping("/{postId}")
-    fun deletePost(@PathVariable postId: Long): ResponseEntity<Unit> {
-        postService.deletePost(postId)
+    fun deletePost(@AuthenticationPrincipal user: CustomUser, @PathVariable postId: Long, userId: Long): ResponseEntity<Unit> {
+        val userId = user.id
+        postService.deletePost(postId, userId)
         return ResponseEntity
             .status(HttpStatus.NO_CONTENT)
             .build()
     }
 
     @PostMapping("/likes/{postId}/{userId}")
-    fun createLikeForPost(@PathVariable postId: Long, @RequestHeader userId: Long): ResponseEntity<PostLikeResponse> {
+    fun createLikeForPost(
+        @AuthenticationPrincipal user: CustomUser,
+        @PathVariable postId: Long, userId: Long
+    ): ResponseEntity<PostLikeResponse> {
+        val userId = user.id
         return ResponseEntity.status(HttpStatus.CREATED).body(likeService.createLikeForPost(postId, userId))
     }
 
     @DeleteMapping("/likes/{postId}/{userId}")
-    fun deleteLikeForPost(@PathVariable postId: Long, @RequestHeader userId: Long): ResponseEntity<Unit> {
+    fun deleteLikeForPost(
+        @AuthenticationPrincipal user: CustomUser,
+        @PathVariable postId: Long, userId: Long
+    ): ResponseEntity<Unit> {
+        val userId = user.id
         likeService.deleteLikeForPost(postId, userId)
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build()
     }
