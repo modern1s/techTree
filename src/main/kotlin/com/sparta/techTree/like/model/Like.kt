@@ -2,18 +2,22 @@ package com.sparta.techTree.like.model
 
 
 
+import com.sparta.techTree.comment.model.Comment
 import com.sparta.techTree.like.dto.CommentLikeResponse
 import com.sparta.techTree.like.dto.PostLikeResponse
+import com.sparta.techTree.post.model.Post
 import jakarta.persistence.*
 
 @Entity
 @Table(name = "like_table")
 class Like(
-    @Column(name = "post_id")
-    val postId: Long?,
+    @ManyToOne
+    @JoinColumn(name = "post_id")
+    val post: Post?,
 
-    @Column(name = "comment_id")
-    val commentId: Long?,
+    @ManyToOne
+    @JoinColumn(name = "comment_id")
+    val comment: Comment?,
 
     @Column(name = "user_id")
     val userId: Long,
@@ -21,7 +25,7 @@ class Like(
     @Column(name = "liked")
     var liked: Boolean = false,
 
-) {
+    ) {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
@@ -29,7 +33,6 @@ class Like(
 
 fun Like.toPostLikeResponse(): PostLikeResponse {
     return PostLikeResponse(
-        postId = postId!!,
         userId = userId,
         liked = liked,
     )
@@ -37,7 +40,6 @@ fun Like.toPostLikeResponse(): PostLikeResponse {
 
 fun Like.toCommentLikeResponse(): CommentLikeResponse {
     return CommentLikeResponse(
-        commentId = commentId,
         userId = userId,
         liked = liked
     )
