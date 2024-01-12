@@ -1,6 +1,7 @@
 package com.sparta.techTree.post.model
 
 import com.sparta.techTree.comment.model.Comment
+import com.sparta.techTree.common.model.BaseTimeEntity
 import com.sparta.techTree.post.dto.PostResponse
 import jakarta.persistence.*
 

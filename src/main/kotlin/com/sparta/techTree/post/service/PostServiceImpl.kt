@@ -1,5 +1,6 @@
 package com.sparta.techTree.post.service
 
+import com.sparta.techTree.common.exception.ModelNotFoundException
 import com.sparta.techTree.post.dto.UpdatePostRequest
 import com.sparta.techTree.post.dto.CreatePostRequest
 import com.sparta.techTree.post.dto.PostResponse
@@ -9,7 +10,7 @@ import com.sparta.techTree.post.model.Post
 import com.sparta.techTree.post.model.toResponse
 import com.sparta.techTree.post.repository.PostRepository
 import org.springframework.data.repository.findByIdOrNull
-import com.sparta.techTree.exception.ModelNotFoundException
+
 import com.sparta.techTree.like.repository.LikeRepository
 
 
@@ -49,8 +50,8 @@ class PostServiceImpl(private val postRepository: PostRepository, private val li
     override fun updatePost(postId: Long, request: UpdatePostRequest): PostResponse {
         val post = postRepository.findByIdOrNull(postId) ?: throw ModelNotFoundException("Post", postId)
         val countLikes = likeRepository.countByPostId(postId)
-        post.title = request.title
-        post.content = request.content
+        post.title = request.title ?: post.title
+        post.content = request.content ?: post.content
         post.countLikes = countLikes
         return post.toResponse()
     }

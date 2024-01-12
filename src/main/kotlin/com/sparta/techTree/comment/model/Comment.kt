@@ -1,7 +1,7 @@
 package com.sparta.techTree.comment.model
 
 import com.sparta.techTree.comment.dto.CommentResponse
-import com.sparta.techTree.post.model.BaseTimeEntity
+import com.sparta.techTree.common.model.BaseTimeEntity
 import com.sparta.techTree.post.model.Post
 import jakarta.persistence.*
 
@@ -33,4 +33,5 @@ fun Comment.toResponse(): CommentResponse {
         countLikes = countLikes
     )
 }
+
 

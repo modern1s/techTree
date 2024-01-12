@@ -6,11 +6,9 @@ import com.sparta.techTree.comment.dto.UpdateCommentRequest
 import com.sparta.techTree.comment.model.Comment
 import com.sparta.techTree.comment.model.toResponse
 import com.sparta.techTree.comment.repository.CommentRepository
-import com.sparta.techTree.exception.ModelNotFoundException
+import com.sparta.techTree.common.exception.ModelNotFoundException
 import com.sparta.techTree.like.repository.LikeRepository
-import com.sparta.techTree.post.dto.PostResponse
 import com.sparta.techTree.post.model.Post
-import com.sparta.techTree.post.model.toResponse
 import com.sparta.techTree.post.repository.PostRepository
 import jakarta.transaction.Transactional
 import org.springframework.data.repository.findByIdOrNull

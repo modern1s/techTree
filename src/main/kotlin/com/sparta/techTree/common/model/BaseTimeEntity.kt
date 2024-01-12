@@ -1,4 +1,4 @@
-package com.sparta.techTree.post.model
+package com.sparta.techTree.common.model
 
 import jakarta.persistence.Column
 import jakarta.persistence.EntityListeners
