@@ -3,10 +3,7 @@ package com.sparta.techTree.user.service
 import com.sparta.techTree.common.auth.JwtTokenProvider
 import com.sparta.techTree.common.auth.TokenInfo
 import com.sparta.techTree.common.exception.InvalidInputException
-import com.sparta.techTree.user.dto.InfoRequest
-import com.sparta.techTree.user.dto.LoginRequest
-import com.sparta.techTree.user.dto.SignUpRequest
-import com.sparta.techTree.user.dto.UserResponse
+import com.sparta.techTree.user.dto.*
 import com.sparta.techTree.user.model.*
 import com.sparta.techTree.user.repository.UserRepository
 import com.sparta.techTree.user.repository.UserRoleRepository
@@ -93,6 +90,7 @@ class UserServiceImpl(
         user.toResponse()
         return "수정되었습니다."
     }
+
 
     // 회원 탈퇴
     @Transactional
