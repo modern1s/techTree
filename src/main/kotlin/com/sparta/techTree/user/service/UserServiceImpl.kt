@@ -75,6 +75,7 @@ class UserServiceImpl(
     }
 
     //내 정보 수정
+    @Transactional
     override fun saveMyInfo(infoRequest: InfoRequest): String {
         val user = userRepository.findByEmail(infoRequest.email)
             ?: throw InvalidInputException("email", "이메일(${infoRequest.email})이 존재하지 않습니다.")
@@ -94,6 +95,7 @@ class UserServiceImpl(
     }
 
     // 회원 탈퇴
+    @Transactional
     override fun deleteMyInfo(userId: Long):String{
         val user = userRepository.findById(userId).orElseThrow {
             NoSuchElementException("해당 ID를 가진 사용자를 찾을 수 없습니다.")
