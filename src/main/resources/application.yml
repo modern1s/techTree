@@ -24,9 +24,9 @@ spring:
                 format_sql: true
                 highlight_sql: true
     datasource:
-        url: jdbc:postgresql://db.fwsspudyollydfupfjne.supabase.co:5432/postgres
+        url: jdbc:postgresql://db.ndbpzerhdnwejmxzcrdc.supabase.co:5432/postgres
         username: postgres
-        password: sb2005@sb2005
+        password: PMFbNt7ZED27cyq
 logging:
     pattern:
         console: "[%d{HH:mm:ss.SSS}][%-5level][%logger.%method:line%line] - %msg%n"

@@ -15,4 +15,6 @@ interface UserService {
     fun searchMyInfo(email: String): UserResponse
 
     fun saveMyInfo(infoRequest: InfoRequest): String
+
+    fun deleteMyInfo(userId: Long): String
 }

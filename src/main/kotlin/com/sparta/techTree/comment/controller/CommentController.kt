@@ -13,7 +13,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping("/comments")
+@RequestMapping("/comment")
 class CommentController(private val commentService: CommentService, private val likeService: LikeService) {
 
     @GetMapping("/{postId}")

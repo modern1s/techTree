@@ -8,6 +8,8 @@ import com.sparta.techTree.like.dto.PostLikeResponse
 import com.sparta.techTree.post.model.Post
 import com.sparta.techTree.user.model.UserEntity
 import jakarta.persistence.*
+import org.hibernate.annotations.OnDelete
+import org.hibernate.annotations.OnDeleteAction
 
 @Entity
 @Table(name = "like_table")
@@ -26,6 +28,7 @@ class Like(
     //연관 관계 설정
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     val user: UserEntity
 
     ) {

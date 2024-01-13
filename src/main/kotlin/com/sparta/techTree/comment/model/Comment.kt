@@ -6,6 +6,8 @@ import com.sparta.techTree.like.model.Like
 import com.sparta.techTree.post.model.Post
 import com.sparta.techTree.user.model.UserEntity
 import jakarta.persistence.*
+import org.hibernate.annotations.OnDelete
+import org.hibernate.annotations.OnDeleteAction
 
 @Entity
 @Table(name = "comment")
@@ -22,6 +24,7 @@ class Comment(
     //연관 관계 지어줌
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     val user: UserEntity?
     ) : BaseTimeEntity() {
     @Id

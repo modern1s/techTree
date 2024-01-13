@@ -7,6 +7,8 @@ import com.sparta.techTree.like.model.toPostLikeResponse
 import com.sparta.techTree.post.dto.PostResponse
 import com.sparta.techTree.user.model.UserEntity
 import jakarta.persistence.*
+import org.hibernate.annotations.OnDelete
+import org.hibernate.annotations.OnDeleteAction
 
 
 @Entity
@@ -26,6 +28,7 @@ class Post(
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     val user: UserEntity
 ) : BaseTimeEntity() {
 

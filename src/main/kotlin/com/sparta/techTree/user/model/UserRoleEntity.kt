@@ -1,6 +1,8 @@
 package com.sparta.techTree.user.model
 
 import jakarta.persistence.*
+import org.hibernate.annotations.OnDelete
+import org.hibernate.annotations.OnDeleteAction
 
 @Entity
 class UserRoleEntity(
@@ -14,5 +16,6 @@ class UserRoleEntity(
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(foreignKey = ForeignKey(name = "fk_user_role_member_id"))
+    @OnDelete(action = OnDeleteAction.CASCADE)
     val user: UserEntity
 )

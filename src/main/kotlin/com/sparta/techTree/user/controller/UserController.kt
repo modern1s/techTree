@@ -56,4 +56,16 @@ class UserController (
         val resultMsg: String = userService.saveMyInfo(infoRequest)
         return BaseResponse(message = resultMsg)
     }
+
+    // 회원 탈퇴
+    @DeleteMapping("/info")
+    fun deleteMyInfo(): BaseResponse<UserResponse> {
+        val userId = (SecurityContextHolder
+            .getContext()
+            .authentication
+            .principal as CustomUser)
+            .id
+        val resultMsg: String = userService.deleteMyInfo(userId)
+        return BaseResponse(message = resultMsg)
+    }
 }

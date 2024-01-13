@@ -92,4 +92,14 @@ class UserServiceImpl(
         user.toResponse()
         return "수정되었습니다."
     }
+
+    // 회원 탈퇴
+    override fun deleteMyInfo(userId: Long):String{
+        val user = userRepository.findById(userId).orElseThrow {
+            NoSuchElementException("해당 ID를 가진 사용자를 찾을 수 없습니다.")
+        }
+
+        userRepository.delete(user)
+        return "삭제되었습니다."
+    }
 }
