@@ -33,7 +33,7 @@ class UserServiceImpl(
             signUpRequest.email,
             createDelegatingPasswordEncoder().encode(signUpRequest.password),
             signUpRequest.name,
-            signUpRequest.birth,
+            signUpRequest.birth.toString(),
             signUpRequest.nickname,
             signUpRequest.techStack
         )
@@ -77,7 +77,7 @@ class UserServiceImpl(
         val user = userRepository.findByEmail(infoRequest.email)
             ?: throw InvalidInputException("email", "이메일(${infoRequest.email})이 존재하지 않습니다.")
 
-        if(infoRequest.password != infoRequest.passwordConfirm){
+        if (infoRequest.password != infoRequest.passwordConfirm) {
             throw InvalidInputException("다른 비밀번호를 입력하셨습니다")
         }
 
@@ -94,7 +94,7 @@ class UserServiceImpl(
 
     // 회원 탈퇴
     @Transactional
-    override fun deleteMyInfo(userId: Long):String{
+    override fun deleteMyInfo(userId: Long): String {
         val user = userRepository.findById(userId).orElseThrow {
             NoSuchElementException("해당 ID를 가진 사용자를 찾을 수 없습니다.")
         }
