@@ -10,6 +10,8 @@ import com.sparta.techTree.common.exception.ModelNotFoundException
 import com.sparta.techTree.like.repository.LikeRepository
 import com.sparta.techTree.post.model.Post
 import com.sparta.techTree.post.repository.PostRepository
+import com.sparta.techTree.user.model.UserEntity
+import com.sparta.techTree.user.repository.UserRepository
 import jakarta.transaction.Transactional
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
@@ -19,14 +21,16 @@ import org.springframework.stereotype.Service
 class CommentServiceImpl(
     private val commentRepository: CommentRepository,
     private val postRepository: PostRepository,
-    private val likeRepository: LikeRepository
+    private val likeRepository: LikeRepository,
+    private val userRepository: UserRepository
 ) : CommentService {
 
     @Transactional
-    override fun createComment(postId: Long, request: CreateCommentRequest): CommentResponse {
+    override fun createComment(postId: Long, userId: Long, request: CreateCommentRequest): CommentResponse {
         val post: Post = postRepository.findByIdOrNull(postId) ?: throw ModelNotFoundException("Post", postId)
+        val user: UserEntity = userRepository.findByIdOrNull(userId) ?: throw ModelNotFoundException("User", userId)
         val comment = Comment(
-            post = post, userId = request.userId, content = request.content, countLikes = 0
+            post = post, user = user, content = request.content, countLikes = 0
         )
         val savedComment = commentRepository.save(comment)
         return savedComment.toResponse()

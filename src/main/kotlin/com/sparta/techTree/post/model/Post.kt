@@ -3,10 +3,11 @@ package com.sparta.techTree.post.model
 import com.sparta.techTree.comment.model.Comment
 import com.sparta.techTree.common.model.BaseTimeEntity
 import com.sparta.techTree.like.model.Like
-import com.sparta.techTree.like.model.toPostLikeResponse
 import com.sparta.techTree.post.dto.PostResponse
 import com.sparta.techTree.user.model.UserEntity
 import jakarta.persistence.*
+import org.hibernate.annotations.OnDelete
+import org.hibernate.annotations.OnDeleteAction
 
 
 @Entity
@@ -23,9 +24,10 @@ class Post(
 
     @OneToMany(mappedBy = "post", cascade = [CascadeType.REMOVE])
     val likes: List<Like> = mutableListOf(),
-    //유저와 연결
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     val user: UserEntity
 ) : BaseTimeEntity() {
 
@@ -41,7 +43,7 @@ fun Post.toResponse(): PostResponse {
         content = content,
         createdAt = this.createdAt,
         updatedAt = this.updatedAt,
-        userid = user.id!!,
+        userId = user.id!!,
         countLikes = likes.size
     )
 }

@@ -6,13 +6,13 @@ import com.sparta.techTree.like.model.Like
 import com.sparta.techTree.post.model.Post
 import com.sparta.techTree.user.model.UserEntity
 import jakarta.persistence.*
+import org.hibernate.annotations.OnDelete
+import org.hibernate.annotations.OnDeleteAction
 
 @Entity
 @Table(name = "comment")
 class Comment(
     @Column(name = "content") var content: String,
-
-    @Column(name = "user_id") val userId: Long,
 
     @Column(name = "count_likes") var countLikes: Long = 0,
 
@@ -21,18 +21,21 @@ class Comment(
     @OneToMany(mappedBy = "comment", cascade = [CascadeType.REMOVE])
     val likes: List<Like> = mutableListOf(),
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "user_id")
-//    val user: UserEntity
-    ) : BaseTimeEntity() {
+    //연관 관계 지어줌
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    val user: UserEntity?
+) : BaseTimeEntity() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
 }
+
 fun Comment.toResponse(): CommentResponse {
     return CommentResponse(
         id = id!!,
-        userId = userId,
+        userId = user?.id!!,
         postId = post?.id!!,
         content = content,
         createdAt = this.createdAt,

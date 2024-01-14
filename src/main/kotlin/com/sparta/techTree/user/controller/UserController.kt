@@ -14,11 +14,11 @@ import org.springframework.web.bind.annotation.*
 
 @RequestMapping("/auth")
 @RestController
-class UserController (
+class UserController(
     private val userService: UserService
-){
+) {
     @PostMapping("/signup")
-    fun signup(@RequestBody @Valid signUpRequest: SignUpRequest): BaseResponse<Unit>{
+    fun signup(@RequestBody @Valid signUpRequest: SignUpRequest): BaseResponse<Unit> {
         val resultMsg: String = userService.signUp(signUpRequest)
         return BaseResponse(message = resultMsg)
     }
@@ -54,6 +54,18 @@ class UserController (
             .email
         infoRequest.email = userEmail
         val resultMsg: String = userService.saveMyInfo(infoRequest)
+        return BaseResponse(message = resultMsg)
+    }
+
+    // 회원 탈퇴
+    @DeleteMapping("/info")
+    fun deleteMyInfo(): BaseResponse<UserResponse> {
+        val userId = (SecurityContextHolder
+            .getContext()
+            .authentication
+            .principal as CustomUser)
+            .id
+        val resultMsg: String = userService.deleteMyInfo(userId)
         return BaseResponse(message = resultMsg)
     }
 }

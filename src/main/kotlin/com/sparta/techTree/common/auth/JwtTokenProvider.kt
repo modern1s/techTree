@@ -13,7 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Component
 import java.util.*
 
-const val EXPIRATION_MILLISECONDS: Long = 1000* 60 * 60 * 12
+const val EXPIRATION_MILLISECONDS: Long = 1000 * 60 * 60 * 12
 
 @Component
 class JwtTokenProvider {
@@ -36,7 +36,7 @@ class JwtTokenProvider {
         val accessToken = Jwts
             .builder()
             .setSubject(authentication.name)
-            .claim("auth",authorities)
+            .claim("auth", authorities)
             .claim("email", (authentication.principal as CustomUser).email)
             .claim("id", (authentication.principal as CustomUser).id)
             .setIssuedAt(now)
@@ -44,7 +44,7 @@ class JwtTokenProvider {
             .signWith(key, SignatureAlgorithm.HS256)
             .compact()
 
-        return TokenInfo("Bearer",accessToken)
+        return TokenInfo("Bearer", accessToken)
     }
 
     /// token 정보 추출
@@ -58,14 +58,15 @@ class JwtTokenProvider {
         //권한 정보 추출
         val authorities: Collection<GrantedAuthority> = (auth as String)
             .split(",")
-            .map{ SimpleGrantedAuthority(it) }
+            .map { SimpleGrantedAuthority(it) }
 
-        val principal: UserDetails = CustomUser(email.toString(), id.toString().toLong(), claims.subject,"",authorities)
+        val principal: UserDetails =
+            CustomUser(email.toString(), id.toString().toLong(), claims.subject, "", authorities)
 
-        return UsernamePasswordAuthenticationToken(principal,"",authorities)
+        return UsernamePasswordAuthenticationToken(principal, "", authorities)
     }
 
-   //TOKEN 검증
+    //TOKEN 검증
     fun validateToken(token: String): Boolean {
         try {
             getClaims(token)
