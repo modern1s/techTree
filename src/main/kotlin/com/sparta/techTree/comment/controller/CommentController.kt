@@ -32,7 +32,7 @@ class CommentController(private val commentService: CommentService, private val 
         return ResponseEntity.status(HttpStatus.CREATED).body(createdComment)
     }
 
-    @PutMapping("/{commentId}")
+    @PatchMapping("/{commentId}")
     fun updateComment(
         @AuthenticationPrincipal user: CustomUser,
         @PathVariable commentId: Long,
