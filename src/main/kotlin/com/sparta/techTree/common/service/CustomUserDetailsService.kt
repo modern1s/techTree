@@ -19,6 +19,7 @@ class CustomUserDetailsService(
         userRepository.findByEmail(email)
             ?.let { createUserDetails(it) }
             ?: throw UsernameNotFoundException("해당하는 유저를 찾을 수 없습니다.")
+
     private fun createUserDetails(user: UserEntity): UserDetails =
         CustomUser(
             user.email,

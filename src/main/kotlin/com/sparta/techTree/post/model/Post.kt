@@ -3,7 +3,6 @@ package com.sparta.techTree.post.model
 import com.sparta.techTree.comment.model.Comment
 import com.sparta.techTree.common.model.BaseTimeEntity
 import com.sparta.techTree.like.model.Like
-import com.sparta.techTree.like.model.toPostLikeResponse
 import com.sparta.techTree.post.dto.PostResponse
 import com.sparta.techTree.user.model.UserEntity
 import jakarta.persistence.*

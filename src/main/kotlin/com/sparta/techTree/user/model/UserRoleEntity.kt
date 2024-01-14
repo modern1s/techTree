@@ -8,9 +8,9 @@ import org.hibernate.annotations.OnDeleteAction
 class UserRoleEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    var id: Long?= null,
+    var id: Long? = null,
 
-    @Column(nullable= false, length = 30)
+    @Column(nullable = false, length = 30)
     @Enumerated(EnumType.STRING)
     val role: UserRole,
 

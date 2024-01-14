@@ -25,16 +25,15 @@ class LikeServiceImpl(
     private val commentRepository: CommentRepository,
     private val userRepository: UserRepository
 ) : LikeService {
-    //연결에 따른 코드 약간 수정 user 추가
-    //기존 코드가 userid를 직접 입력해줘야했는데, 이젠 repository에서 받아와서 id값을 사용함
+
     @Transactional
     override fun createLikeForPost(postId: Long, userId: Long): PostLikeResponse {
         val post: Post = postRepository.findByIdOrNull(postId) ?: throw ModelNotFoundException("Post", postId)
-        val user: UserEntity = userRepository.findByIdOrNull(userId) ?: throw ModelNotFoundException("User",userId)
+        val user: UserEntity = userRepository.findByIdOrNull(userId) ?: throw ModelNotFoundException("User", userId)
         if (post != null) {
             val existingLike = likeRepository.findByPostIdAndUserId(postId, userId)
             if (existingLike == null) {
-                val newLike = likeRepository.save(Like(post= post, user = user, comment = null, liked = true))
+                val newLike = likeRepository.save(Like(post = post, user = user, comment = null, liked = true))
                 return newLike.toPostLikeResponse()
             } else {
                 throw IllegalArgumentException("Like already exists for postId = $postId and userId = $userId")
@@ -43,6 +42,7 @@ class LikeServiceImpl(
             throw ModelNotFoundException("Post", postId)
         }
     }
+
     @Transactional
     override fun deleteLikeForPost(postId: Long, userId: Long) {
         val existingLike = likeRepository.findByPostIdAndUserId(postId, userId)
@@ -52,12 +52,12 @@ class LikeServiceImpl(
             throw ModelNotFoundException("Like", "postId = $postId, userId = $userId")
         }
     }
-    //연결에 따른 코드 약간 수정 user 추가
-    //기존 코드가 userid를 직접 입력해줘야했는데, 이젠 repository에서 받아와서 id값을 사용함
+
     @Transactional
     override fun createLikeForComment(commentId: Long, userId: Long): CommentLikeResponse {
-        val comment: Comment = commentRepository.findByIdOrNull(commentId) ?: throw ModelNotFoundException("Comment", commentId)
-        val user: UserEntity = userRepository.findByIdOrNull(userId) ?: throw ModelNotFoundException("User",userId)
+        val comment: Comment =
+            commentRepository.findByIdOrNull(commentId) ?: throw ModelNotFoundException("Comment", commentId)
+        val user: UserEntity = userRepository.findByIdOrNull(userId) ?: throw ModelNotFoundException("User", userId)
         if (comment != null) {
             val existingLike = likeRepository.findByCommentIdAndUserId(commentId, userId)
             if (existingLike == null) {

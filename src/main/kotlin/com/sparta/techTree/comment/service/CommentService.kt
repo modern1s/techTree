@@ -3,7 +3,6 @@ package com.sparta.techTree.comment.service
 import com.sparta.techTree.comment.dto.CreateCommentRequest
 import com.sparta.techTree.comment.dto.CommentResponse
 import com.sparta.techTree.comment.dto.UpdateCommentRequest
-import com.sparta.techTree.comment.model.Comment
 
 interface CommentService {
     fun createComment(postId: Long, userId: Long, request: CreateCommentRequest): CommentResponse

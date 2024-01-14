@@ -10,18 +10,19 @@ import com.sparta.techTree.post.model.Post
 import com.sparta.techTree.post.model.toResponse
 import com.sparta.techTree.post.repository.PostRepository
 import org.springframework.data.repository.findByIdOrNull
-
 import com.sparta.techTree.like.repository.LikeRepository
 import com.sparta.techTree.user.model.UserEntity
 import com.sparta.techTree.user.repository.UserRepository
-import jakarta.persistence.EntityNotFoundException
-import org.springframework.security.core.context.SecurityContextHolder
 import java.nio.file.AccessDeniedException
 
 
 @Service
 
-class PostServiceImpl(private val postRepository: PostRepository, private val likeRepository: LikeRepository,private val userRepository: UserRepository) :
+class PostServiceImpl(
+    private val postRepository: PostRepository,
+    private val likeRepository: LikeRepository,
+    private val userRepository: UserRepository
+) :
     PostService {
 
 
@@ -43,7 +44,7 @@ class PostServiceImpl(private val postRepository: PostRepository, private val li
 
 
     override fun createPost(request: CreatePostRequest, userId: Long): PostResponse {
-        val user: UserEntity = userRepository.findByIdOrNull(userId) ?: throw ModelNotFoundException("User",userId)
+        val user: UserEntity = userRepository.findByIdOrNull(userId) ?: throw ModelNotFoundException("User", userId)
         val createdPost = postRepository.save(
             Post(
                 title = request.title,
@@ -56,10 +57,8 @@ class PostServiceImpl(private val postRepository: PostRepository, private val li
     }
 
     @Transactional
-    override fun updatePost(postId: Long, userId: Long, request: UpdatePostRequest,): PostResponse {
+    override fun updatePost(postId: Long, userId: Long, request: UpdatePostRequest): PostResponse {
         val post = postRepository.findByIdOrNull(postId) ?: throw ModelNotFoundException("Post", postId)
-        //이 if문이 없으면 userid 1을 가진사람이 userid 2인 사람의 글도 수정이 가능함
-        //저는 이랬는데, 혹시 이거 없이도 잘 되신분 있으시면 말씀해주세요!
         if (post.user.id != userId) {
             throw AccessDeniedException("User with ID $userId does not have permission to update post with ID $postId")
         }
@@ -74,10 +73,8 @@ class PostServiceImpl(private val postRepository: PostRepository, private val li
     }
 
     @Transactional
-    override fun deletePost(postId: Long,userId: Long) {
+    override fun deletePost(postId: Long, userId: Long) {
         val post = postRepository.findByIdOrNull(postId) ?: throw ModelNotFoundException("Post", postId)
-        //이 if문이 없으면 userid 1을 가진사람이 userid 2인 사람의 글도 삭제가 가능함
-        //저는 이랬는데, 혹시 이거 없이도 잘 되신분 있으시면 말씀해주세요!
         if (post.user.id != userId) {
             throw AccessDeniedException("User with ID $userId does not have permission to update post with ID $postId")
         }

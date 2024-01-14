@@ -1,9 +1,6 @@
 package com.sparta.techTree.user.model
 
-import com.sparta.techTree.comment.model.Comment
 import com.sparta.techTree.common.model.BaseTimeEntity
-import com.sparta.techTree.like.model.Like
-import com.sparta.techTree.post.model.Post
 import com.sparta.techTree.user.dto.UserResponse
 import jakarta.persistence.*
 import java.time.LocalDate
@@ -20,11 +17,11 @@ class UserEntity(
     name: String,
     nickname: String,
     techStack: String
-): BaseTimeEntity(){
+) : BaseTimeEntity() {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id : Long? = null
+    val id: Long? = null
 
     @Column(nullable = false, length = 30, updatable = false)
     var email = email
@@ -36,11 +33,11 @@ class UserEntity(
     var name = name
 
     @Column(nullable = false, length = 10)
-    var nickname= nickname
+    var nickname = nickname
 
     @Temporal(TemporalType.DATE)
     @Column(nullable = false)
-    var birth= birth
+    var birth = birth
 
     @Column(nullable = false)
     var techStack = techStack
@@ -48,7 +45,7 @@ class UserEntity(
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     val userRole: List<UserRoleEntity>? = null
 
-//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    //    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
 //    val posts: List<Post>? = null
 //
 //    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
@@ -62,7 +59,7 @@ class UserEntity(
         this.format(DateTimeFormatter.ofPattern("yyyyMMdd"))
 }
 
-fun UserEntity.toResponse(): UserResponse{
+fun UserEntity.toResponse(): UserResponse {
     return UserResponse(
         id = id!!,
         email = email,

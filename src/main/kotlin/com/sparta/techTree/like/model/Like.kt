@@ -1,7 +1,6 @@
 package com.sparta.techTree.like.model
 
 
-
 import com.sparta.techTree.comment.model.Comment
 import com.sparta.techTree.like.dto.CommentLikeResponse
 import com.sparta.techTree.like.dto.PostLikeResponse
@@ -31,11 +30,12 @@ class Like(
     @OnDelete(action = OnDeleteAction.CASCADE)
     val user: UserEntity
 
-    ) {
+) {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
 }
+
 //연관 관계 설정에 따른 userId 부분 수정
 fun Like.toPostLikeResponse(): PostLikeResponse {
     return PostLikeResponse(
@@ -43,6 +43,7 @@ fun Like.toPostLikeResponse(): PostLikeResponse {
         liked = liked,
     )
 }
+
 //연관 관계 설정에 따른 userId 부분 수정
 fun Like.toCommentLikeResponse(): CommentLikeResponse {
     return CommentLikeResponse(

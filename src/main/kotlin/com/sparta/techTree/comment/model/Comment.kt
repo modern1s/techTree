@@ -26,11 +26,12 @@ class Comment(
     @JoinColumn(name = "user_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     val user: UserEntity?
-    ) : BaseTimeEntity() {
+) : BaseTimeEntity() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
 }
+
 fun Comment.toResponse(): CommentResponse {
     return CommentResponse(
         id = id!!,

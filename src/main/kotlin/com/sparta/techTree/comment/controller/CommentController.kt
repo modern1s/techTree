@@ -46,11 +46,13 @@ class CommentController(private val commentService: CommentService, private val 
     @DeleteMapping("/{commentId}")
     fun deleteComment(
         @AuthenticationPrincipal user: CustomUser,
-        @PathVariable commentId: Long): ResponseEntity<Unit> {
+        @PathVariable commentId: Long
+    ): ResponseEntity<Unit> {
         val userId = user.id
         commentService.deleteComment(commentId, userId)
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build()
     }
+
     //{userid}는 적을 필요가 없음
     @PostMapping("/likes/{commentId}")
     fun createLikeForComment(
@@ -60,6 +62,7 @@ class CommentController(private val commentService: CommentService, private val 
         val userId = user.id
         return ResponseEntity.status(HttpStatus.CREATED).body(likeService.createLikeForComment(commentId, userId))
     }
+
     //{userid}는 적을 필요가 없음
     @DeleteMapping("/likes/{commentId}")
     fun deleteLikeForComment(

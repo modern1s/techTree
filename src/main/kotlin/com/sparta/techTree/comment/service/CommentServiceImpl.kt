@@ -24,13 +24,11 @@ class CommentServiceImpl(
     private val likeRepository: LikeRepository,
     private val userRepository: UserRepository
 ) : CommentService {
-  //comment 같은 경우는 post와 다르게 추가적인 조건 없이도 잘 작동이 됨... 이유는 모르겠음, 연구해봐야 될듯!
 
-    //기존 코드도 문제는 없었지만 user부분 연결하면서 코드 변경 repository에서 id값을 가져옴
     @Transactional
     override fun createComment(postId: Long, userId: Long, request: CreateCommentRequest): CommentResponse {
         val post: Post = postRepository.findByIdOrNull(postId) ?: throw ModelNotFoundException("Post", postId)
-        val user: UserEntity = userRepository.findByIdOrNull(userId) ?: throw ModelNotFoundException("User",userId)
+        val user: UserEntity = userRepository.findByIdOrNull(userId) ?: throw ModelNotFoundException("User", userId)
         val comment = Comment(
             post = post, user = user, content = request.content, countLikes = 0
         )

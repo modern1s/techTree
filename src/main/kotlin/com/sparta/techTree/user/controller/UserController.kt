@@ -14,11 +14,11 @@ import org.springframework.web.bind.annotation.*
 
 @RequestMapping("/auth")
 @RestController
-class UserController (
+class UserController(
     private val userService: UserService
-){
+) {
     @PostMapping("/signup")
-    fun signup(@RequestBody @Valid signUpRequest: SignUpRequest): BaseResponse<Unit>{
+    fun signup(@RequestBody @Valid signUpRequest: SignUpRequest): BaseResponse<Unit> {
         val resultMsg: String = userService.signUp(signUpRequest)
         return BaseResponse(message = resultMsg)
     }
