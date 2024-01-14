@@ -36,7 +36,7 @@ class PostController(private val postService: PostService,private val likeServic
     //@pathvariable에 userid는 필요없음,userid를 직접 적어서 하는게 아니고 로그인 되있는 아이디를 사용해야 하기 때문
     @PatchMapping("/{postId}")
     fun updatePost(@AuthenticationPrincipal user: CustomUser,
-        @PathVariable postId: Long,updatePostRequest: UpdatePostRequest): ResponseEntity<PostResponse> {
+        @PathVariable postId: Long, @RequestBody updatePostRequest: UpdatePostRequest): ResponseEntity<PostResponse> {
         val userId = user.id
         return ResponseEntity
             .status(HttpStatus.OK)

@@ -63,11 +63,14 @@ class PostServiceImpl(private val postRepository: PostRepository, private val li
         if (post.user.id != userId) {
             throw AccessDeniedException("User with ID $userId does not have permission to update post with ID $postId")
         }
-        val countLikes = likeRepository.countByPostId(postId)
         post.title = request.title ?: post.title
         post.content = request.content ?: post.content
+        val updatePost = postRepository.save(post)
+        val countLikes = likeRepository.countByPostId(postId)
         post.countLikes = countLikes
-        return post.toResponse()
+
+
+        return updatePost.toResponse()
     }
 
     @Transactional
