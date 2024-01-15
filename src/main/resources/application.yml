@@ -27,6 +27,7 @@ spring:
         url: jdbc:postgresql://db.fwsspudyollydfupfjne.supabase.co:5432/postgres
         username: postgres
         password: sb2005@sb2005
+
 logging:
     pattern:
         console: "[%d{HH:mm:ss.SSS}][%-5level][%logger.%method:line%line] - %msg%n"
