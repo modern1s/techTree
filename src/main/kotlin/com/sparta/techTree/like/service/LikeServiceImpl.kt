@@ -98,7 +98,7 @@ class LikeServiceImpl(
     override fun toggleLikeForComment(commentId: Long, userId: Long): CommentLikeResponse {
         val comment: Comment = commentRepository.findByIdOrNull(commentId) ?: throw ModelNotFoundException("Comment", commentId)
         val user: UserEntity = userRepository.findByIdOrNull(userId) ?: throw ModelNotFoundException("User", userId)
-        val existingLike = likeRepository.findByPostIdAndUserId(commentId, userId)
+        val existingLike = likeRepository.findByCommentIdAndUserId(commentId, userId)
         return if (existingLike == null) {
             val newLike = likeRepository.save(Like(post = null , comment = comment , user = user , liked = true))
             comment.countLikes++
