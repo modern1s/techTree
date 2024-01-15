@@ -3,10 +3,7 @@ package com.sparta.techTree.user.service
 import com.sparta.techTree.common.auth.JwtTokenProvider
 import com.sparta.techTree.common.auth.TokenInfo
 import com.sparta.techTree.common.exception.InvalidInputException
-import com.sparta.techTree.user.dto.InfoRequest
-import com.sparta.techTree.user.dto.LoginRequest
-import com.sparta.techTree.user.dto.SignUpRequest
-import com.sparta.techTree.user.dto.UserResponse
+import com.sparta.techTree.user.dto.*
 import com.sparta.techTree.user.model.*
 import com.sparta.techTree.user.repository.UserRepository
 import com.sparta.techTree.user.repository.UserRoleRepository
@@ -36,7 +33,7 @@ class UserServiceImpl(
             signUpRequest.email,
             createDelegatingPasswordEncoder().encode(signUpRequest.password),
             signUpRequest.name,
-            signUpRequest.birth,
+            signUpRequest.birth.toString(),
             signUpRequest.nickname,
             signUpRequest.techStack
         )
@@ -75,11 +72,12 @@ class UserServiceImpl(
     }
 
     //내 정보 수정
+    @Transactional
     override fun saveMyInfo(infoRequest: InfoRequest): String {
         val user = userRepository.findByEmail(infoRequest.email)
             ?: throw InvalidInputException("email", "이메일(${infoRequest.email})이 존재하지 않습니다.")
 
-        if(infoRequest.password != infoRequest.passwordConfirm){
+        if (infoRequest.password != infoRequest.passwordConfirm) {
             throw InvalidInputException("다른 비밀번호를 입력하셨습니다")
         }
 
@@ -89,7 +87,19 @@ class UserServiceImpl(
         user.birth = infoRequest.birth ?: user.birth
         user.techStack = infoRequest.techStack ?: user.techStack
 
-        userRepository.save(user)
+        user.toResponse()
         return "수정되었습니다."
+    }
+
+
+    // 회원 탈퇴
+    @Transactional
+    override fun deleteMyInfo(userId: Long): String {
+        val user = userRepository.findById(userId).orElseThrow {
+            NoSuchElementException("해당 ID를 가진 사용자를 찾을 수 없습니다.")
+        }
+
+        userRepository.delete(user)
+        return "삭제되었습니다."
     }
 }

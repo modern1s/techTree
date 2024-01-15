@@ -10,33 +10,33 @@ import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 
-    @Configuration
-    @EnableWebSecurity
-    class SecurityConfig(
-        private val jwtTokenProvider: JwtTokenProvider
-    ) {
-        @Bean
-        fun filterChain(http: HttpSecurity): SecurityFilterChain {
-            http
-                .httpBasic { it.disable() }
-                .csrf { it.disable() }
-                .sessionManagement {
-                    it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                }
-                .authorizeHttpRequests {
-                    it.requestMatchers("/auth/signup", "/auth/login").anonymous()
-                        .requestMatchers("/auth/info/**").hasRole("MEMBER")
-                        .anyRequest().permitAll()
-                }
-                .addFilterBefore(
-                    JwtAuthenticationFilter(jwtTokenProvider),
-                    UsernamePasswordAuthenticationFilter::class.java
-                )
-            return http.build()
-        }
+@Configuration
+@EnableWebSecurity
+class SecurityConfig(
+    private val jwtTokenProvider: JwtTokenProvider
+) {
+    @Bean
+    fun filterChain(http: HttpSecurity): SecurityFilterChain {
+        http
+            .httpBasic { it.disable() }
+            .csrf { it.disable() }
+            .sessionManagement {
+                it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            }
+            .authorizeHttpRequests {
+                it.requestMatchers("/auth/signup", "/auth/login").anonymous()
+                    .requestMatchers("/auth/info/**").hasRole("MEMBER")
+                    .anyRequest().permitAll()
+            }
+            .addFilterBefore(
+                JwtAuthenticationFilter(jwtTokenProvider),
+                UsernamePasswordAuthenticationFilter::class.java
+            )
+        return http.build()
+    }
 
-        @Bean
-        fun PasswordEncoder(): PasswordEncoder =
-            PasswordEncoderFactories.createDelegatingPasswordEncoder()
+    @Bean
+    fun PasswordEncoder(): PasswordEncoder =
+        PasswordEncoderFactories.createDelegatingPasswordEncoder()
 
 }

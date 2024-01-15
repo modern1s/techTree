@@ -10,7 +10,7 @@ interface LikeRepository : JpaRepository<Like, Long> {
 
     fun countByPostId(postId: Long): Long
 
-    fun findByCommentIdAndUserId(commentId:Long, userId:Long): Like?
+    fun findByCommentIdAndUserId(commentId: Long, userId: Long): Like?
 
     fun countByCommentId(commentId: Long): Long
 }

@@ -8,5 +8,5 @@ interface UserRepository : JpaRepository<UserEntity, Long> {
     fun findByEmail(email: String): UserEntity?
 }
 
-interface UserRoleRepository: JpaRepository<UserRoleEntity,Long>{
+interface UserRoleRepository : JpaRepository<UserRoleEntity, Long> {
 }
