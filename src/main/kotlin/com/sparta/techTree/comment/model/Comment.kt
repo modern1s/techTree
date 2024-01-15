@@ -21,7 +21,6 @@ class Comment(
     @OneToMany(mappedBy = "comment", cascade = [CascadeType.REMOVE])
     val likes: List<Like> = mutableListOf(),
 
-    //연관 관계 지어줌
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     @OnDelete(action = OnDeleteAction.CASCADE)

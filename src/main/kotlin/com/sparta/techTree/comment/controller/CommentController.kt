@@ -53,7 +53,6 @@ class CommentController(private val commentService: CommentService, private val 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build()
     }
 
-    //{userid}는 적을 필요가 없음
     @PostMapping("/likes/{commentId}")
     fun createLikeForComment(
         @AuthenticationPrincipal user: CustomUser,
@@ -63,7 +62,6 @@ class CommentController(private val commentService: CommentService, private val 
         return ResponseEntity.status(HttpStatus.CREATED).body(likeService.createLikeForComment(commentId, userId))
     }
 
-    //{userid}는 적을 필요가 없음
     @DeleteMapping("/likes/{commentId}")
     fun deleteLikeForComment(
         @AuthenticationPrincipal user: CustomUser,

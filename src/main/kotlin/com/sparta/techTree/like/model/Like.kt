@@ -24,7 +24,6 @@ class Like(
     @Column(name = "liked")
     var liked: Boolean = false,
 
-    //연관 관계 설정
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -36,7 +35,6 @@ class Like(
     var id: Long? = null
 }
 
-//연관 관계 설정에 따른 userId 부분 수정
 fun Like.toPostLikeResponse(): PostLikeResponse {
     return PostLikeResponse(
         userId = user.id!!,
@@ -44,7 +42,6 @@ fun Like.toPostLikeResponse(): PostLikeResponse {
     )
 }
 
-//연관 관계 설정에 따른 userId 부분 수정
 fun Like.toCommentLikeResponse(): CommentLikeResponse {
     return CommentLikeResponse(
         userId = user.id!!,
