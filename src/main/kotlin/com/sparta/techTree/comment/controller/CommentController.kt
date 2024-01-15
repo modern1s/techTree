@@ -6,6 +6,7 @@ import com.sparta.techTree.comment.dto.UpdateCommentRequest
 import com.sparta.techTree.comment.service.CommentService
 import com.sparta.techTree.common.dto.CustomUser
 import com.sparta.techTree.like.dto.CommentLikeResponse
+import com.sparta.techTree.like.dto.PostLikeResponse
 import com.sparta.techTree.like.service.LikeService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -53,22 +54,31 @@ class CommentController(private val commentService: CommentService, private val 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build()
     }
 
-    @PostMapping("/likes/{commentId}")
-    fun createLikeForComment(
-        @AuthenticationPrincipal user: CustomUser,
-        @PathVariable commentId: Long
-    ): ResponseEntity<CommentLikeResponse> {
-        val userId = user.id
-        return ResponseEntity.status(HttpStatus.CREATED).body(likeService.createLikeForComment(commentId, userId))
-    }
+//    @PostMapping("/likes/{commentId}")
+//    fun createLikeForComment(
+//        @AuthenticationPrincipal user: CustomUser,
+//        @PathVariable commentId: Long
+//    ): ResponseEntity<CommentLikeResponse> {
+//        val userId = user.id
+//        return ResponseEntity.status(HttpStatus.CREATED).body(likeService.createLikeForComment(commentId, userId))
+//    }
+//
+//    @DeleteMapping("/likes/{commentId}")
+//    fun deleteLikeForComment(
+//        @AuthenticationPrincipal user: CustomUser,
+//        @PathVariable commentId: Long
+//    ): ResponseEntity<Unit> {
+//        val userId = user.id
+//        likeService.deleteLikeForComment(commentId, userId)
+//        return ResponseEntity.status(HttpStatus.NO_CONTENT).build()
+//    }
 
-    @DeleteMapping("/likes/{commentId}")
-    fun deleteLikeForComment(
+    @PatchMapping("/likes/{commentId}")
+    fun toggleLikeForPost(
         @AuthenticationPrincipal user: CustomUser,
         @PathVariable commentId: Long
-    ): ResponseEntity<Unit> {
+    ) : ResponseEntity<CommentLikeResponse> {
         val userId = user.id
-        likeService.deleteLikeForComment(commentId, userId)
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build()
+        return ResponseEntity.status(HttpStatus.OK).body(likeService.toggleLikeForComment(commentId,userId))
     }
 }

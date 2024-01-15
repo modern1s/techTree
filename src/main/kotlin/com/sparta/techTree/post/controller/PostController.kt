@@ -57,23 +57,31 @@ class PostController(private val postService: PostService, private val likeServi
             .build()
     }
 
-    @PostMapping("/likes/{postId}")
-    fun createLikeForPost(
+//    @PostMapping("/likes/{postId}")
+//    fun createLikeForPost(
+//        @AuthenticationPrincipal user: CustomUser,
+//        @PathVariable postId: Long
+//    ): ResponseEntity<PostLikeResponse> {
+//        val userId = user.id
+//        return ResponseEntity.status(HttpStatus.CREATED).body(likeService.createLikeForPost(postId, userId))
+//    }
+//
+//    @DeleteMapping("/likes/{postId}")
+//    fun deleteLikeForPost(
+//        @AuthenticationPrincipal user: CustomUser,
+//        @PathVariable postId: Long
+//    ): ResponseEntity<Unit> {
+//        val userId = user.id
+//        likeService.deleteLikeForPost(postId, userId)
+//        return ResponseEntity.status(HttpStatus.NO_CONTENT).build()
+//    }
+
+    @PatchMapping("/likes/{postId}")
+    fun toggleLikeForPost(
         @AuthenticationPrincipal user: CustomUser,
         @PathVariable postId: Long
-    ): ResponseEntity<PostLikeResponse> {
+    ) : ResponseEntity<PostLikeResponse> {
         val userId = user.id
-        return ResponseEntity.status(HttpStatus.CREATED).body(likeService.createLikeForPost(postId, userId))
+        return ResponseEntity.status(HttpStatus.OK).body(likeService.toggleLikeForPost(postId,userId))
     }
-
-    @DeleteMapping("/likes/{postId}")
-    fun deleteLikeForPost(
-        @AuthenticationPrincipal user: CustomUser,
-        @PathVariable postId: Long
-    ): ResponseEntity<Unit> {
-        val userId = user.id
-        likeService.deleteLikeForPost(postId, userId)
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build()
-    }
-
 }

@@ -26,52 +26,91 @@ class LikeServiceImpl(
     private val userRepository: UserRepository
 ) : LikeService {
 
-    @Transactional
-    override fun createLikeForPost(postId: Long, userId: Long): PostLikeResponse {
-            val post: Post = postRepository.findByIdOrNull(postId)
-                ?: throw ModelNotFoundException("Post", postId)
-            val user: UserEntity = userRepository.findByIdOrNull(userId)
-                ?: throw ModelNotFoundException("User", userId)
-            val existingLike = likeRepository.findByPostIdAndUserId(postId, userId)
-            if (existingLike == null) {
-                val newLike = likeRepository.save(Like(post = post, user = user, comment = null, liked = true))
-                return newLike.toPostLikeResponse()
-            } else {
-                throw IllegalArgumentException("Like already exists for postId = $postId and userId = $userId")
-            }
-    }
+//    @Transactional
+//    override fun createLikeForPost(postId: Long, userId: Long): PostLikeResponse {
+//            val post: Post = postRepository.findByIdOrNull(postId) ?: throw ModelNotFoundException("Post", postId)
+//            val user: UserEntity = userRepository.findByIdOrNull(userId) ?: throw ModelNotFoundException("User", userId)
+//            val existingLike = likeRepository.findByPostIdAndUserId(postId, userId)
+//            if (existingLike == null) {
+//                val newLike = likeRepository.save(Like(post = post, user = user, comment = null, liked = true))
+//                return newLike.toPostLikeResponse()
+//            } else {
+//                throw IllegalArgumentException("Like already exists for postId = $postId and userId = $userId")
+//            }
+//    }
+//
+//    @Transactional
+//    override fun deleteLikeForPost(postId: Long, userId: Long) {
+//        val existingLike = likeRepository.findByPostIdAndUserId(postId, userId)
+//        if (existingLike != null) {
+//            likeRepository.delete(existingLike)
+//        } else {
+//            throw ModelNotFoundException("Like", "postId = $postId, userId = $userId")
+//        }
+//    }
+//
+//    @Transactional
+//    override fun createLikeForComment(commentId: Long, userId: Long): CommentLikeResponse {
+//        val comment: Comment = commentRepository.findByIdOrNull(commentId) ?: throw ModelNotFoundException("Comment", commentId)
+//        val user: UserEntity = userRepository.findByIdOrNull(userId) ?: throw ModelNotFoundException("User", userId)
+//            val existingLike = likeRepository.findByCommentIdAndUserId(commentId, userId)
+//            if (existingLike == null) {
+//                val newLike = likeRepository.save(Like(post = null, comment = comment, user = user, liked = true))
+//                return newLike.toCommentLikeResponse()
+//            } else {
+//                throw IllegalArgumentException("Like already exists for commentId = $commentId and userId = $userId")
+//            }
+//    }
+//
+//    @Transactional
+//    override fun deleteLikeForComment(commentId: Long, userId: Long) {
+//        val existingLike = likeRepository.findByCommentIdAndUserId(commentId, userId)
+//        if (existingLike != null) {
+//            likeRepository.delete(existingLike)
+//        } else {
+//            throw ModelNotFoundException("Like", "commentId = $commentId, userId = $userId")
+//        }
+//    }
 
+    //토글로 구현
     @Transactional
-    override fun deleteLikeForPost(postId: Long, userId: Long) {
+    override fun toggleLikeForPost(postId: Long, userId: Long): PostLikeResponse {
+        //변수 선언
+        val post: Post = postRepository.findByIdOrNull(postId) ?: throw ModelNotFoundException("Post", postId)
+        val user: UserEntity = userRepository.findByIdOrNull(userId) ?: throw ModelNotFoundException("User", userId)
         val existingLike = likeRepository.findByPostIdAndUserId(postId, userId)
-        if (existingLike != null) {
-            likeRepository.delete(existingLike)
+        //postId와 userId에 대해서 null 일때 newLike 로 좋아요 생성 , 그 후 countLikes를 플러스 해서 저장 liked 상태는 true
+        return if (existingLike == null) {
+            val newLike = likeRepository.save(Like(post = post , comment = null , user = user , liked = true))
+            post.countLikes++
+            postRepository.save(post)
+            newLike.toPostLikeResponse()
+            //null 이 아닐시(존재할 경우), 삭제후 countLikes를 마이너스 해서 저장 liked 상태를 false 로
         } else {
-            throw ModelNotFoundException("Like", "postId = $postId, userId = $userId")
+            likeRepository.delete(existingLike)
+            post.countLikes--
+            postRepository.save(post)
+            existingLike.toPostLikeResponse().copy(liked = false)
         }
     }
 
     @Transactional
-    override fun createLikeForComment(commentId: Long, userId: Long): CommentLikeResponse {
+    override fun toggleLikeForComment(commentId: Long, userId: Long): CommentLikeResponse {
         val comment: Comment = commentRepository.findByIdOrNull(commentId) ?: throw ModelNotFoundException("Comment", commentId)
         val user: UserEntity = userRepository.findByIdOrNull(userId) ?: throw ModelNotFoundException("User", userId)
-            val existingLike = likeRepository.findByCommentIdAndUserId(commentId, userId)
-            if (existingLike == null) {
-                val newLike = likeRepository.save(Like(post = null, comment = comment, user = user, liked = true))
-                return newLike.toCommentLikeResponse()
-            } else {
-                throw IllegalArgumentException("Like already exists for commentId = $commentId and userId = $userId")
-            }
-    }
-
-    @Transactional
-    override fun deleteLikeForComment(commentId: Long, userId: Long) {
-        val existingLike = likeRepository.findByCommentIdAndUserId(commentId, userId)
-        if (existingLike != null) {
-            likeRepository.delete(existingLike)
+        val existingLike = likeRepository.findByPostIdAndUserId(commentId, userId)
+        return if (existingLike == null) {
+            val newLike = likeRepository.save(Like(post = null , comment = comment , user = user , liked = true))
+            comment.countLikes++
+            commentRepository.save(comment)
+            newLike.toCommentLikeResponse()
         } else {
-            throw ModelNotFoundException("Like", "commentId = $commentId, userId = $userId")
+            likeRepository.delete(existingLike)
+            comment.countLikes--
+            commentRepository.save(comment)
+            existingLike.toCommentLikeResponse().copy(liked = false)
         }
     }
-
 }
+
+
